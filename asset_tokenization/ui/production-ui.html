@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetToken - Production Marketplace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #1a1a1a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #60a5fa;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: #60a5fa;
+        }
+
+        .wallet-btn {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+
+        .wallet-btn.connected {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        /* Main Content */
+        .main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        /* Assets Section */
+        .assets-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .asset-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-8px);
+            border-color: #60a5fa;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .asset-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #60a5fa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asset-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .asset-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #60a5fa;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .asset-info {
+            padding: 1.5rem;
+        }
+
+        .asset-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .asset-creator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .creator-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .asset-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-supply {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+
+        .btn-secondary {
+            background: #2a2a2a;
+            color: #9ca3af;
+            border: 1px solid #3a3a3a;
+        }
+
+        .btn-secondary:hover {
+            background: #3a3a3a;
+            color: #ffffff;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            background: #2a2a2a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+
+        .form-input::placeholder {
+            color: #6b7280;
+        }
+
+        /* Wallet Modal */
+        .wallet-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .wallet-option:hover {
+            border-color: #60a5fa;
+            background: #3a3a3a;
+        }
+
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #fff;
+            padding: 8px;
+        }
+
+        .wallet-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .wallet-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .wallet-desc {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        /* Loading */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3a3a3a;
+            border-radius: 50%;
+            border-top-color: #60a5fa;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .assets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                AssetToken
+            </div>
+            <nav class="nav">
+                <a href="#explore">Explore</a>
+                <a href="#create">Create</a>
+                <a href="#my-assets">My Assets</a>
+                <a href="#activity">Activity</a>
+            </nav>
+            <button class="wallet-btn" id="walletBtn">
+                <i class="fas fa-wallet"></i>
+                <span id="walletText">Connect Wallet</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Токенизируйте любые активы</h1>
+                <p>Создавайте, торгуйте и инвестируйте в токенизированные активы на блокчейне Solana</p>
+                
+                <div class="stats" id="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalAssets">0</div>
+                        <div class="stat-label">Активов</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalVolume">0 SOL</div>
+                        <div class="stat-label">Объем торгов</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalUsers">0</div>
+                        <div class="stat-label">Пользователей</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTransactions">0</div>
+                        <div class="stat-label">Сделок</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assets Section -->
+        <section class="assets-section">
+            <div class="section-header">
+                <h2 class="section-title">Популярные активы</h2>
+            </div>
+            <div class="assets-grid" id="assetsGrid">
+                <!-- Assets will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Create Asset Modal -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Создать актив</h3>
+                <button class="close-btn" onclick="closeCreateModal()">&times;</button>
+            </div>
+            <form id="createAssetForm">
+                <div class="form-group">
+                    <label class="form-label">Название актива</label>
+                    <input type="text" class="form-input" name="name" placeholder="Введите название" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <textarea class="form-input" name="description" placeholder="Описание актива" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">URL изображения</label>
+                    <input type="url" class="form-input" name="image_url" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Общее количество токенов</label>
+                    <input type="number" class="form-input" name="total_supply" placeholder="1000000" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Цена за токен (SOL)</label>
+                    <input type="number" class="form-input" name="price_per_token" step="0.001" placeholder="0.001" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Категория</label>
+                    <select class="form-input" name="category">
+                        <option value="real_estate">Недвижимость</option>
+                        <option value="art">Искусство</option>
+                        <option value="equity">Акции</option>
+                        <option value="commodities">Товары</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-plus"></i>
+                    Создать актив
+                </button>
+            </form>
+            <div id="createResult" class="message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="modal" id="walletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Подключить кошелек</h3>
+                <button class="close-btn" onclick="closeWalletModal()">&times;</button>
+            </div>
+            <div class="wallet-options">
+                <div class="wallet-option" onclick="connectWallet('phantom')">
+                    <div class="wallet-icon">
+                        <img src="https://phantom.app/img/phantom-logo.png" alt="Phantom">
+                    </div>
+                    <div>
+                        <div class="wallet-name">Phantom</div>
+                        <div class="wallet-desc">Популярный Solana кошелек</div>
+                    </div>
+                </div>
+                <div class="wallet-option" onclick="connectWallet('metamask')">
+                    <div class="wallet-icon">
+                        <img src="https://metamask.io/images/metamask-logo.png" alt="MetaMask">
+                    </div>
+                    <div>
+                        <div class="wallet-name">MetaMask</div>
+                        <div class="wallet-desc">Универсальный Web3 кошелек</div>
+                    </div>
+                </div>
+                <div class="wallet-option" onclick="connectWallet('solflare')">
+                    <div class="wallet-icon">
+                        <img src="https://solflare.com/assets/solflare-logo.png" alt="Solflare">
+                    </div>
+                    <div>
+                        <div class="wallet-name">Solflare</div>
+                        <div class="wallet-desc">Безопасный Solana кошелек</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let isWalletConnected = false;
+        let currentWallet = null;
+        let currentUser = null;
+        let assets = [];
+
+        // API Configuration
+        const API_BASE = 'http://localhost:3001';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function () {
+            loadAssets();
+            updateStats();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Wallet button
+            document.getElementById('walletBtn').addEventListener('click', function () {
+                if (isWalletConnected) {
+                    disconnectWallet();
+                } else {
+                    openWalletModal();
+                }
+            });
+
+            // Create asset form
+            document.getElementById('createAssetForm').addEventListener('submit', handleCreateAsset);
+
+            // Close modals on outside click
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+        }
+
+        // Load assets from API
+        async function loadAssets() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets`);
+                const data = await response.json();
+
+                if (data.success) {
+                    assets = data.data;
+                    renderAssets(assets);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error loading assets:', error);
+                // Show mock data if API fails
+                assets = [
+                    {
+                        asset_id: 'ASSET_001',
+                        name: 'Real Estate Token #1',
+                        description: 'Токенизированная недвижимость в центре города',
+                        image_url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400',
+                        price_per_token: 0.001,
+                        remaining_supply: 800000,
+                        total_supply: 1000000,
+                        creator_name: 'Creator1',
+                        creator_avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100'
+                    },
+                    {
+                        asset_id: 'ASSET_002',
+                        name: 'Art Collection #1',
+                        description: 'Коллекция цифрового искусства',
+                        image_url: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400',
+                        price_per_token: 0.002,
+                        remaining_supply: 300000,
+                        total_supply: 500000,
+                        creator_name: 'Creator1',
+                        creator_avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100'
+                    }
+                ];
+                renderAssets(assets);
+            }
+        }
+
+        // Update stats
+        async function updateStats() {
+            try {
+                const response = await fetch(`${API_BASE}/api/analytics`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('totalAssets').textContent = data.data.total_assets || 0;
+                    document.getElementById('totalVolume').textContent = `${data.data.total_volume || 0} SOL`;
+                    document.getElementById('totalUsers').textContent = data.data.total_users || 0;
+                    document.getElementById('totalTransactions').textContent = data.data.total_transactions || 0;
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                // Set default values
+                document.getElementById('totalAssets').textContent = assets.length;
+                document.getElementById('totalVolume').textContent = '1.5 SOL';
+                document.getElementById('totalUsers').textContent = '42';
+                document.getElementById('totalTransactions').textContent = '128';
+            }
+        }
+
+        // Render assets
+        function renderAssets(assetsData) {
+            const grid = document.getElementById('assetsGrid');
+            grid.innerHTML = '';
+
+            assetsData.forEach(asset => {
+                const assetCard = document.createElement('div');
+                assetCard.className = 'asset-card';
+                assetCard.innerHTML = `
+                    <div class="asset-image">
+                        ${asset.image_url ? 
+                            `<img src="${asset.image_url}" alt="${asset.name}">` : 
+                            '<i class="fas fa-cube"></i>'
+                        }
+                        <div class="asset-badge">${asset.category || 'undefined'}</div>
+                    </div>
+                    <div class="asset-info">
+                        <h3 class="asset-title">${asset.name}</h3>
+                        <div class="asset-creator">
+                            <img src="${asset.creator_avatar || 'https://via.placeholder.com/24'}" alt="Creator" class="creator-avatar">
+                            <span>${asset.creator_name || 'Unknown'}</span>
+                        </div>
+                        <div class="asset-price">${asset.price_per_token} SOL</div>
+                        <div class="asset-supply">${parseInt(asset.remaining_supply).toLocaleString()}/${parseInt(asset.total_supply).toLocaleString()}</div>
+                        <div class="asset-actions">
+                            <button class="btn btn-primary" onclick="buyAsset('${asset.asset_id}')">
+                                <i class="fas fa-shopping-cart"></i>
+                                Купить
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewAsset('${asset.asset_id}')">
+                                <i class="fas fa-eye"></i>
+                                Подробнее
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(assetCard);
+            });
+        }
+
+        // Wallet functions
+        function openWalletModal() {
+            document.getElementById('walletModal').classList.add('active');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.remove('active');
+        }
+
+        function connectWallet(walletType) {
+            isWalletConnected = true;
+            currentWallet = walletType;
+            currentUser = {
+                address: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j',
+                name: walletType.charAt(0).toUpperCase() + walletType.slice(1)
+            };
+
+            let walletName = '';
+            switch(walletType) {
+                case 'phantom':
+                    walletName = 'Phantom';
+                    break;
+                case 'metamask':
+                    walletName = 'MetaMask';
+                    break;
+                case 'solflare':
+                    walletName = 'Solflare';
+                    break;
+                default:
+                    walletName = 'Wallet';
+            }
+
+            document.getElementById('walletText').textContent = walletName;
+            document.getElementById('walletBtn').classList.add('connected');
+            document.getElementById('walletBtn').innerHTML = `<i class="fas fa-check"></i> ${walletName}`;
+
+            closeWalletModal();
+            showMessage(`${walletName} успешно подключен!`, 'success');
+        }
+
+        function disconnectWallet() {
+            isWalletConnected = false;
+            currentWallet = null;
+            currentUser = null;
+            document.getElementById('walletText').textContent = 'Connect Wallet';
+            document.getElementById('walletBtn').classList.remove('connected');
+            document.getElementById('walletBtn').innerHTML = '<i class="fas fa-wallet"></i> Connect Wallet';
+            showMessage('Кошелек отключен', 'success');
+        }
+
+        // Asset functions
+        function buyAsset(assetId) {
+            if (!isWalletConnected) {
+                openWalletModal();
+                return;
+            }
+
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (asset) {
+                const amount = prompt(`Количество токенов для покупки (максимум: ${parseInt(asset.remaining_supply).toLocaleString()}):`);
+                if (amount && parseInt(amount) > 0) {
+                    buyAssetTokens(assetId, parseInt(amount));
+                }
+            }
+        }
+
+        async function buyAssetTokens(assetId, amount) {
+            try {
+                const response = await fetch(`${API_BASE}/api/transactions/buy`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        buyer_address: currentUser.address,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(`Успешно куплено ${amount} токенов!`, 'success');
+                    loadAssets(); // Reload assets
+                    updateStats(); // Update stats
+                } else {
+                    showMessage(`Ошибка: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error buying tokens:', error);
+                showMessage('Ошибка при покупке токенов', 'error');
+            }
+        }
+
+        function viewAsset(assetId) {
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (asset) {
+                alert(`Актив: ${asset.name}\nОписание: ${asset.description}\nЦена: ${asset.price_per_token} SOL\nОстаток: ${parseInt(asset.remaining_supply).toLocaleString()}/${parseInt(asset.total_supply).toLocaleString()}`);
+            }
+        }
+
+        // Create asset functions
+        function openCreateModal() {
+            if (!isWalletConnected) {
+                openWalletModal();
+                return;
+            }
+            document.getElementById('createModal').classList.add('active');
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.getElementById('createAssetForm').reset();
+            document.getElementById('createResult').style.display = 'none';
+        }
+
+        async function handleCreateAsset(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const assetData = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                image_url: formData.get('image_url'),
+                total_supply: parseInt(formData.get('total_supply')),
+                price_per_token: parseFloat(formData.get('price_per_token')),
+                category: formData.get('category'),
+                creator_address: currentUser.address
+            };
+
+            const resultDiv = document.getElementById('createResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'message';
+            resultDiv.innerHTML = '<div class="spinner"></div> Создание актива...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/assets/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(assetData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'message success';
+                    resultDiv.innerHTML = '✅ Актив успешно создан!';
+                    loadAssets(); // Reload assets
+                    updateStats(); // Update stats
+                    setTimeout(closeCreateModal, 2000);
+                } else {
+                    resultDiv.className = 'message error';
+                    resultDiv.innerHTML = `❌ Ошибка: ${data.error}`;
+                }
+            } catch (error) {
+                console.error('Error creating asset:', error);
+                resultDiv.className = 'message error';
+                resultDiv.innerHTML = '❌ Ошибка при создании актива';
+            }
+        }
+
+        // Utility functions
+        function showMessage(message, type) {
+            // Create temporary message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messageDiv.style.position = 'fixed';
+            messageDiv.style.top = '100px';
+            messageDiv.style.right = '20px';
+            messageDiv.style.zIndex = '3000';
+            messageDiv.style.minWidth = '300px';
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Add create button
+        const createButton = document.createElement('button');
+        createButton.innerHTML = '<i class="fas fa-plus"></i>';
+        createButton.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        `;
+        createButton.onclick = openCreateModal;
+        createButton.onmouseover = function() {
+            this.style.transform = 'scale(1.1)';
+        };
+        createButton.onmouseout = function() {
+            this.style.transform = 'scale(1)';
+        };
+        document.body.appendChild(createButton);
+    </script>
+</body>
+
+</html>

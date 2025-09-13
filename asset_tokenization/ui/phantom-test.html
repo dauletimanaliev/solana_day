@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест Phantom кошелька</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #059669;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .success { background: rgba(16, 185, 129, 0.2); border: 2px solid #10b981; }
+        .error { background: rgba(239, 68, 68, 0.2); border: 2px solid #ef4444; }
+        .info { background: rgba(59, 130, 246, 0.2); border: 2px solid #3b82f6; }
+        .warning { background: rgba(245, 158, 11, 0.2); border: 2px solid #f59e0b; }
+        .log {
+            background: #000;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        .wallet-info {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>👻 Тест Phantom кошелька</h1>
+    
+    <div class="test-section">
+        <h2>1. Проверка Phantom</h2>
+        <div id="phantomCheck"></div>
+        <button onclick="checkPhantom()">Проверить Phantom</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Подключение к Phantom</h2>
+        <div id="phantomConnect"></div>
+        <button onclick="connectPhantom()" id="connectBtn">Подключить Phantom</button>
+        <button onclick="disconnectPhantom()" id="disconnectBtn" disabled>Отключить Phantom</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Информация о кошельке</h2>
+        <div id="walletInfo" class="wallet-info"></div>
+        <button onclick="getWalletInfo()">Обновить информацию</button>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Логи</h2>
+        <div id="logs" class="log"></div>
+        <button onclick="clearLogs()">Очистить логи</button>
+    </div>
+
+    <script>
+        let logs = [];
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            logs.push(logEntry);
+            
+            const logsDiv = document.getElementById('logs');
+            logsDiv.innerHTML = logs.join('<br>');
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+            
+            console.log(logEntry);
+        }
+
+        function addStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function checkPhantom() {
+            log('🔍 Проверка Phantom кошелька...');
+            
+            if (typeof window.solana === 'undefined') {
+                addStatus('phantomCheck', '❌ window.solana не найден. Установите Phantom кошелек!', 'error');
+                log('❌ window.solana не найден');
+                return;
+            }
+            
+            if (!window.solana.isPhantom) {
+                addStatus('phantomCheck', '❌ Phantom не обнаружен. Установите Phantom кошелек!', 'error');
+                log('❌ window.solana.isPhantom = false');
+                return;
+            }
+            
+            addStatus('phantomCheck', '✅ Phantom обнаружен и готов к работе!', 'success');
+            log('✅ Phantom обнаружен');
+            log(`Phantom версия: ${window.solana.version || 'неизвестно'}`);
+            log(`Phantom подключен: ${window.solana.isConnected || false}`);
+        }
+
+        async function connectPhantom() {
+            try {
+                addStatus('phantomConnect', '🔄 Подключение к Phantom...', 'info');
+                log('🔄 Попытка подключения к Phantom...');
+                
+                if (!window.solana || !window.solana.isPhantom) {
+                    throw new Error('Phantom не обнаружен');
+                }
+                
+                // Проверяем, не подключен ли уже
+                if (window.solana.isConnected) {
+                    log('✅ Phantom уже подключен');
+                    addStatus('phantomConnect', '✅ Phantom уже подключен!', 'success');
+                    updateWalletInfo();
+                    return;
+                }
+                
+                // Запрашиваем подключение
+                log('🔄 Запрос подключения к Phantom...');
+                const response = await window.solana.connect();
+                
+                log('✅ Phantom подключен успешно!');
+                log(`Адрес: ${response.publicKey.toString()}`);
+                
+                addStatus('phantomConnect', `✅ Phantom подключен!<br>Адрес: ${response.publicKey.toString()}`, 'success');
+                
+                // Обновляем кнопки
+                document.getElementById('connectBtn').disabled = true;
+                document.getElementById('disconnectBtn').disabled = false;
+                
+                // Обновляем информацию о кошельке
+                updateWalletInfo();
+                
+                // Настраиваем слушатели событий
+                setupPhantomListeners();
+                
+            } catch (error) {
+                log(`❌ Ошибка подключения: ${error.message}`);
+                addStatus('phantomConnect', `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function disconnectPhantom() {
+            try {
+                log('🔄 Отключение от Phantom...');
+                
+                if (window.solana && window.solana.disconnect) {
+                    await window.solana.disconnect();
+                }
+                
+                log('✅ Phantom отключен');
+                addStatus('phantomConnect', '✅ Phantom отключен', 'success');
+                
+                // Обновляем кнопки
+                document.getElementById('connectBtn').disabled = false;
+                document.getElementById('disconnectBtn').disabled = true;
+                
+                // Очищаем информацию о кошельке
+                document.getElementById('walletInfo').innerHTML = '';
+                
+            } catch (error) {
+                log(`❌ Ошибка отключения: ${error.message}`);
+                addStatus('phantomConnect', `❌ Ошибка отключения: ${error.message}`, 'error');
+            }
+        }
+
+        function setupPhantomListeners() {
+            if (window.solana) {
+                window.solana.on('accountChanged', (publicKey) => {
+                    log(`🔄 Аккаунт изменен: ${publicKey ? publicKey.toString() : 'null'}`);
+                    updateWalletInfo();
+                });
+
+                window.solana.on('disconnect', () => {
+                    log('🔌 Phantom отключен');
+                    addStatus('phantomConnect', '🔌 Phantom отключен', 'warning');
+                    document.getElementById('connectBtn').disabled = false;
+                    document.getElementById('disconnectBtn').disabled = true;
+                    document.getElementById('walletInfo').innerHTML = '';
+                });
+            }
+        }
+
+        function updateWalletInfo() {
+            if (!window.solana || !window.solana.isConnected) {
+                document.getElementById('walletInfo').innerHTML = '<div class="status info">Кошелек не подключен</div>';
+                return;
+            }
+            
+            const publicKey = window.solana.publicKey;
+            const address = publicKey.toString();
+            const shortAddress = `${address.slice(0, 4)}...${address.slice(-4)}`;
+            
+            const info = `
+                <div class="status success">
+                    <strong>✅ Phantom подключен</strong><br>
+                    <strong>Адрес:</strong> ${address}<br>
+                    <strong>Короткий адрес:</strong> ${shortAddress}<br>
+                    <strong>Версия:</strong> ${window.solana.version || 'неизвестно'}<br>
+                    <strong>Подключен:</strong> ${window.solana.isConnected ? 'Да' : 'Нет'}
+                </div>
+            `;
+            
+            document.getElementById('walletInfo').innerHTML = info;
+        }
+
+        function getWalletInfo() {
+            updateWalletInfo();
+        }
+
+        function clearLogs() {
+            logs = [];
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        // Автоматическая проверка при загрузке
+        window.addEventListener('load', function() {
+            log('🚀 Страница загружена');
+            setTimeout(() => {
+                checkPhantom();
+                if (window.solana && window.solana.isConnected) {
+                    updateWalletInfo();
+                    document.getElementById('connectBtn').disabled = true;
+                    document.getElementById('disconnectBtn').disabled = false;
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

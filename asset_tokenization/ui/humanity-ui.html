@@ -1,0 +1,3414 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HumanityToken - Решение проблем человечества через токенизацию</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #2a2a2a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .nav {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: #10b981;
+        }
+
+        .wallet-connected {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 260px;
+            max-width: 350px;
+            height: 52px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid transparent;
+        }
+
+        .wallet-connected:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            border-color: #34d399;
+        }
+
+        .test-sol-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        .test-sol-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+        }
+
+
+        /* Main Content */
+        .main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+            padding: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: transparent;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mission-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .mission-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+            border-color: #10b981;
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .mission-icon {
+            font-size: 3rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .mission-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .mission-desc {
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        /* Assets Section */
+        .assets-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0;
+            max-width: 100%;
+            margin: 0;
+        }
+
+        .asset-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-8px);
+            border-color: #10b981;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .asset-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #10b981;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asset-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .asset-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(16, 185, 129, 0.9);
+            color: #000000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .asset-info {
+            padding: 1.5rem;
+        }
+
+        .asset-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .asset-creator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .creator-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .asset-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-supply {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: #2a2a2a;
+            color: #9ca3af;
+            border: 1px solid #3a3a3a;
+        }
+
+        .btn-secondary:hover {
+            background: #3a3a3a;
+            color: #ffffff;
+        }
+
+
+
+        /* Connected Wallet Display */
+        .wallet-connected {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+        }
+
+        .wallet-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .wallet-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wallet-address {
+            font-weight: 600;
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+
+        .wallet-type {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: #ffffff;
+            font-weight: 500;
+            z-index: 10000;
+            min-width: 300px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            margin-bottom: 10px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .toast.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .toast.info {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .toast-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .toast-icon {
+            font-size: 1.2rem;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        /* Business Section */
+        .business-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .business-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: #10b981;
+        }
+
+        .business-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .business-card h3 {
+            color: #f9fafb;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .business-card p {
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Business Dashboard */
+        .business-dashboard {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .business-dashboard h3 {
+            color: #f9fafb;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Analytics Grid */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .analytics-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Dividends Controls */
+        .dividends-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #f9fafb;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f9fafb;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Trading Tabs */
+        .trading-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .tab-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .trading-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .portfolio-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .portfolio-item h4 {
+            color: #f9fafb;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .portfolio-stat {
+            text-align: center;
+        }
+
+        .portfolio-stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .portfolio-stat-label {
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        /* Loading */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3a3a3a;
+            border-radius: 50%;
+            border-top-color: #10b981;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .assets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .mission-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Beautiful Modal Forms */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-form {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid #374151;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-form {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f9fafb;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #374151;
+            color: #f9fafb;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #f9fafb;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #374151;
+            border: 2px solid #4b5563;
+            border-radius: 12px;
+            color: #f9fafb;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .project-type-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .project-type-option {
+            cursor: pointer;
+        }
+
+        .project-type-option input[type="radio"] {
+            display: none;
+        }
+
+        .project-type-card {
+            background: #374151;
+            border: 2px solid #4b5563;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .project-type-option input[type="radio"]:checked+.project-type-card {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .project-type-card:hover {
+            border-color: #6b7280;
+        }
+
+        .project-type-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-type-title {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .project-type-desc {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-modal {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            min-width: 100px;
+        }
+
+        .btn-modal-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-modal-primary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-modal-secondary {
+            background: #374151;
+            color: #f9fafb;
+            border: 1px solid #4b5563;
+        }
+
+        .btn-modal-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .amount-btn {
+            padding: 0.5rem;
+            background: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            color: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .amount-btn:hover {
+            background: #4b5563;
+            border-color: #10b981;
+        }
+
+        .amount-btn.active {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        /* Beautiful Wallet Display */
+        .wallet-connected {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            border: 2px solid transparent;
+            min-width: 220px;
+            max-width: 300px;
+            height: 52px;
+            box-sizing: border-box;
+        }
+
+        .wallet-connected:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            border-color: #34d399;
+        }
+
+        .wallet-icon {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .wallet-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .wallet-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.9;
+        }
+
+        .wallet-address {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .wallet-balance {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #34d399;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .wallet-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 300px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .wallet-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .wallet-dropdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .wallet-dropdown-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        .wallet-dropdown-close {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-dropdown-close:hover {
+            background: #374151;
+            color: #f9fafb;
+        }
+
+        .wallet-dropdown-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .wallet-dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: #374151;
+            border-radius: 8px;
+        }
+
+        .wallet-dropdown-label {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .wallet-dropdown-value {
+            font-size: 0.85rem;
+            color: #f9fafb;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .wallet-dropdown-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .wallet-dropdown-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .wallet-dropdown-btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .wallet-dropdown-btn-primary:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .wallet-dropdown-btn-secondary {
+            background: #374151;
+            color: #f9fafb;
+            border: 1px solid #4b5563;
+        }
+
+        .wallet-dropdown-btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-1px);
+        }
+
+        /* Profile Modal */
+        .profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .profile-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-content {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid #374151;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .profile-modal.show .profile-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .profile-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f9fafb;
+            margin: 0;
+        }
+
+        .profile-close {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .profile-close:hover {
+            background: #374151;
+            color: #f9fafb;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-avatar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            flex-shrink: 0;
+        }
+
+        .profile-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: #374151;
+            border-radius: 12px;
+            border: 1px solid #4b5563;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            color: #f9fafb;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .profile-btn {
+            width: 100%;
+            max-width: 200px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .profile-btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .profile-btn-primary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .profile-btn-secondary {
+            background: #374151;
+            color: #f9fafb;
+            border: 1px solid #4b5563;
+        }
+
+        .profile-btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .profile-info {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .profile-actions {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-heart"></i>
+                HumanityToken
+            </div>
+            <nav class="nav">
+                <a href="#" onclick="showExplore()">Исследовать</a>
+                <a href="#" onclick="showCreate()">Создать</a>
+                <a href="#" onclick="showImpact()">Влияние</a>
+                <a href="#" onclick="showBusiness()">Бизнес</a>
+                <a href="#" onclick="showProfile()">Профиль</a>
+            </nav>
+            <div class="wallet-connected" id="walletBtn" onclick="toggleWalletDropdown()">
+                <div class="wallet-icon">
+                    <img src="https://phantom.app/img/phantom-logo.png" alt="Phantom"
+                        style="width: 20px; height: 20px; border-radius: 4px;">
+                </div>
+                <div class="wallet-info">
+                    <div class="wallet-name">Phantom</div>
+                    <div class="wallet-address">6n3S...w1D1</div>
+                    <div class="wallet-balance">
+                        <i class="fas fa-coins"></i>
+                        <span id="walletBalance">0.0000 SOL</span>
+                    </div>
+                    <div class="wallet-status">
+                        <div class="status-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="test-sol-btn" onclick="getTestSOL()" title="Получить тестовые SOL">
+                <i class="fas fa-coins"></i>
+                Тест SOL
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Решаем проблемы человечества вместе</h1>
+            <div class="hero-subtitle">Токенизация для глобального блага</div>
+            <p>Создавайте, инвестируйте и поддерживайте проекты, которые меняют мир к лучшему. Каждый токен - это
+                шаг к решению глобальных проблем человечества.</p>
+
+            <div class="mission-cards">
+                <div class="mission-card">
+                    <div class="mission-icon">🌍</div>
+                    <div class="mission-title">Экология</div>
+                    <div class="mission-desc">Токенизация экологических проектов для борьбы с изменением климата
+                    </div>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">🏥</div>
+                    <div class="mission-title">Здравоохранение</div>
+                    <div class="mission-desc">Инвестиции в медицинские исследования и доступное лечение</div>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">🎓</div>
+                    <div class="mission-title">Образование</div>
+                    <div class="mission-desc">Поддержка образовательных инициатив по всему миру</div>
+                </div>
+            </div>
+
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalAssets">0</div>
+                    <div class="stat-label">Проектов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalVolume">0 SOL</div>
+                    <div class="stat-label">Инвестировано</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">Участников</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalImpact">0</div>
+                    <div class="stat-label">Жизней изменено</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assets Section -->
+        <section class="assets-section">
+            <div class="section-header">
+                <h2 class="section-title">Проекты, меняющие мир</h2>
+                <p class="section-subtitle">Инвестируйте в проекты, которые решают реальные проблемы человечества</p>
+            </div>
+            <div class="assets-grid" id="assetsGrid">
+                <!-- Assets will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Business Section -->
+        <section class="business-section" id="businessSection" style="display: none;">
+            <div class="container">
+                <h2>Бизнес-Инструменты</h2>
+
+                <!-- Analytics Dashboard -->
+                <div class="business-dashboard" id="analyticsDashboard">
+                    <h3>📊 Аналитика</h3>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <div class="analytics-value" id="totalRevenue">0 SOL</div>
+                            <div class="analytics-label">Общий доход</div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-value" id="totalDividends">0 SOL</div>
+                            <div class="analytics-label">Выплачено дивидендов</div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-value" id="activeProjects">0</div>
+                            <div class="analytics-label">Активных проектов</div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-value" id="totalHolders">0</div>
+                            <div class="analytics-label">Владельцев токенов</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dividends Management -->
+                <div class="business-dashboard" id="dividendsDashboard">
+                    <h3>💰 Управление Дивидендами</h3>
+                    <div class="dividends-controls">
+                        <div class="form-group">
+                            <label>Выберите проект:</label>
+                            <select id="dividendAsset" class="form-control">
+                                <option value="">Выберите проект...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Сумма для распределения (SOL):</label>
+                            <input type="number" id="dividendAmount" class="form-control" placeholder="0.0"
+                                step="0.001">
+                        </div>
+                        <button class="btn btn-primary" onclick="distributeDividends()">Распределить дивиденды</button>
+                    </div>
+                    <div class="dividends-history" id="dividendsHistory">
+                        <h4>История выплат</h4>
+                        <div class="dividends-list" id="dividendsList">
+                            <!-- Дивиденды будут загружены здесь -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trading Section -->
+                <div class="business-dashboard" id="tradingDashboard">
+                    <h3>📈 Торговля</h3>
+                    <div class="trading-tabs">
+                        <button class="tab-btn active" onclick="showTradingTab('sell')">Продать токены</button>
+                        <button class="tab-btn" onclick="showTradingTab('buy')">Купить токены</button>
+                    </div>
+
+                    <div class="trading-content" id="sellTokens">
+                        <div class="form-group">
+                            <label>Выберите токены для продажи:</label>
+                            <select id="sellAsset" class="form-control">
+                                <option value="">Выберите проект...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Количество токенов:</label>
+                            <input type="number" id="sellAmount" class="form-control" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Цена за токен (SOL):</label>
+                            <input type="number" id="sellPrice" class="form-control" placeholder="0.0" step="0.001">
+                        </div>
+                        <button class="btn btn-primary" onclick="createSellOrder()">Создать ордер на продажу</button>
+                    </div>
+
+                    <div class="trading-content" id="buyTokens" style="display: none;">
+                        <div class="form-group">
+                            <label>Выберите токены для покупки:</label>
+                            <select id="buyAsset" class="form-control">
+                                <option value="">Выберите проект...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Количество токенов:</label>
+                            <input type="number" id="buyAmount" class="form-control" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Максимальная цена за токен (SOL):</label>
+                            <input type="number" id="buyMaxPrice" class="form-control" placeholder="0.0" step="0.001">
+                        </div>
+                        <button class="btn btn-primary" onclick="createBuyOrder()">Создать ордер на покупку</button>
+                    </div>
+                </div>
+
+                <!-- Portfolio Section -->
+                <div class="business-dashboard" id="portfolioDashboard">
+                    <h3>🏢 Мой Портфель</h3>
+                    <div class="portfolio-grid" id="portfolioGrid">
+                        <!-- Портфель будет загружен здесь -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Donation Modal -->
+    <div class="modal-overlay" id="donationModal">
+        <div class="modal-form">
+            <div class="modal-header">
+                <h3 class="modal-title">💝 Пожертвовать</h3>
+                <button class="close-btn" onclick="closeDonationModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Проект</label>
+                <div id="donationProjectName"
+                    style="color: #9ca3af; padding: 1rem; background: #2a2a2a; border-radius: 8px; margin-bottom: 1rem;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Сумма в SOL</label>
+                <input type="number" class="form-input" id="donationAmount" placeholder="0.1" step="0.1" min="0.1">
+            </div>
+            <div class="amount-buttons">
+                <button class="amount-btn" onclick="setDonationAmount(0.1)">0.1 SOL</button>
+                <button class="amount-btn" onclick="setDonationAmount(0.5)">0.5 SOL</button>
+                <button class="amount-btn" onclick="setDonationAmount(1)">1 SOL</button>
+                <button class="amount-btn" onclick="setDonationAmount(5)">5 SOL</button>
+                <button class="amount-btn" onclick="setDonationAmount(10)">10 SOL</button>
+                <button class="amount-btn" onclick="setDonationAmount(50)">50 SOL</button>
+            </div>
+            <div class="form-actions">
+                <button class="btn-modal btn-modal-secondary" onclick="closeDonationModal()">Отмена</button>
+                <button class="btn-modal btn-modal-primary" onclick="confirmDonation()">Пожертвовать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investment Modal -->
+    <div class="modal-overlay" id="investmentModal">
+        <div class="modal-form">
+            <div class="modal-header">
+                <h3 class="modal-title">💰 Инвестировать</h3>
+                <button class="close-btn" onclick="closeInvestmentModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Проект</label>
+                <div id="investmentProjectName"
+                    style="color: #9ca3af; padding: 1rem; background: #2a2a2a; border-radius: 8px; margin-bottom: 1rem;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Количество токенов</label>
+                <input type="number" class="form-input" id="investmentAmount" placeholder="10" step="1" min="1">
+            </div>
+            <div class="amount-buttons">
+                <button class="amount-btn" onclick="setInvestmentAmount(10)">10</button>
+                <button class="amount-btn" onclick="setInvestmentAmount(100)">100</button>
+                <button class="amount-btn" onclick="setInvestmentAmount(1000)">1,000</button>
+                <button class="amount-btn" onclick="setInvestmentAmount(5000)">5,000</button>
+                <button class="amount-btn" onclick="setInvestmentAmount(10000)">10,000</button>
+                <button class="amount-btn" onclick="setInvestmentAmount(50000)">50,000</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Общая стоимость</label>
+                <div id="investmentTotal"
+                    style="color: #10b981; padding: 1rem; background: #2a2a2a; border-radius: 8px; font-weight: 600;">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn-modal btn-modal-secondary" onclick="closeInvestmentModal()">Отмена</button>
+                <button class="btn-modal btn-modal-primary" onclick="confirmInvestment()">Инвестировать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Project Modal -->
+    <div class="modal-overlay" id="createProjectModal">
+        <div class="modal-form">
+            <div class="modal-header">
+                <h3 class="modal-title">📝 Создать проект</h3>
+                <button class="close-btn" onclick="closeCreateProjectModal()">&times;</button>
+            </div>
+            <form id="createProjectForm">
+                <div class="form-group">
+                    <label class="form-label">Название проекта</label>
+                    <input type="text" class="form-input" id="projectName" placeholder="Введите название проекта"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание проекта</label>
+                    <textarea class="form-input" id="projectDescription" placeholder="Опишите проект" rows="3"
+                        required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">URL изображения</label>
+                    <input type="url" class="form-input" id="projectImage" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Цель сбора (токенов)</label>
+                    <input type="number" class="form-input" id="projectSupply" placeholder="1000000" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Цена за токен (SOL)</label>
+                    <input type="number" class="form-input" id="projectPrice" placeholder="0.001" step="0.001" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Категория</label>
+                    <select class="form-input" id="projectCategory">
+                        <option value="environment">Экология</option>
+                        <option value="healthcare">Здравоохранение</option>
+                        <option value="education">Образование</option>
+                        <option value="poverty">Борьба с бедностью</option>
+                        <option value="technology">Технологии</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Тип проекта</label>
+                    <div class="project-type-selector">
+                        <label class="project-type-option">
+                            <input type="radio" name="projectType" value="donation" checked>
+                            <div class="project-type-card">
+                                <div class="project-type-icon">❤️</div>
+                                <div class="project-type-title">Пожертвование</div>
+                                <div class="project-type-desc">Только пожертвования, без возврата</div>
+                            </div>
+                        </label>
+                        <label class="project-type-option">
+                            <input type="radio" name="projectType" value="investment">
+                            <div class="project-type-card">
+                                <div class="project-type-icon">📈</div>
+                                <div class="project-type-title">Инвестирование</div>
+                                <div class="project-type-desc">Инвестиции с возможной прибылью</div>
+                            </div>
+                        </label>
+                        <label class="project-type-option">
+                            <input type="radio" name="projectType" value="both">
+                            <div class="project-type-card">
+                                <div class="project-type-icon">🔄</div>
+                                <div class="project-type-title">Оба варианта</div>
+                                <div class="project-type-desc">И пожертвования, и инвестиции</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-modal btn-modal-secondary"
+                        onclick="closeCreateProjectModal()">Отмена</button>
+                    <button type="submit" class="btn-modal btn-modal-primary">Создать проект</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="profile-modal" id="profileModal">
+        <div class="profile-content">
+            <div class="profile-header">
+                <h3 class="profile-title">👤 Профиль пользователя</h3>
+                <button class="profile-close" onclick="closeProfileModal()">&times;</button>
+            </div>
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <div class="avatar-large">👻</div>
+                    <div>
+                        <div style="font-weight: 600; color: #f9fafb; margin-bottom: 0.25rem;">Phantom Wallet</div>
+                        <div style="font-size: 0.8rem; color: #9ca3af;">Подключен</div>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Кошелек</div>
+                        <div class="stat-value" id="profileWallet">Phantom</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Адрес</div>
+                        <div class="stat-value" id="profileAddress" style="font-size: 0.8rem;">Загрузка...</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Баланс SOL</div>
+                        <div class="stat-value" id="profileBalance">Загрузка...</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Статус</div>
+                        <div class="stat-value" style="color: #10b981;">Подключен</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Сеть</div>
+                        <div class="stat-value">Solana Devnet</div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="profile-btn profile-btn-secondary" onclick="copyProfileAddress()">
+                    <i class="fas fa-copy"></i> Копировать адрес
+                </button>
+                <button class="profile-btn profile-btn-primary" onclick="disconnectWallet()">
+                    <i class="fas fa-sign-out-alt"></i> Отключить кошелек
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Solana Web3.js -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
+    <!-- Include Simple Wallet (Only Phantom) -->
+    <script src="simple-wallet.js"></script>
+    <script>
+        // Global variables
+        let assets = [];
+        let currentDonationAsset = null;
+
+        // API Configuration
+        const API_BASE = 'http://localhost:3001';
+
+        // Get test SOL function
+        async function getTestSOL() {
+            try {
+                showToast('Информация', 'Получаем тестовые SOL...', 'info');
+
+                // Simulate getting test SOL
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Update balance display
+                const balanceElement = document.getElementById('walletBalance');
+                const dropdownBalanceElement = document.getElementById('dropdownWalletBalance');
+
+                if (balanceElement) {
+                    balanceElement.textContent = '5.0000 SOL';
+                }
+                if (dropdownBalanceElement) {
+                    dropdownBalanceElement.textContent = '5.0000 SOL';
+                }
+
+                showToast('Успех', 'Получено 5 тестовых SOL! Теперь можете тестировать покупки.', 'success');
+            } catch (error) {
+                console.error('Error getting test SOL:', error);
+                showToast('Ошибка', 'Не удалось получить тестовые SOL', 'error');
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function () {
+            loadAssets();
+            updateStats();
+            setupEventListeners();
+            setupWalletEvents();
+            initSecuritySystem(); // Инициализация системы безопасности
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Wallet div
+            document.getElementById('walletBtn').addEventListener('click', function () {
+                if (window.simpleWalletManager && window.simpleWalletManager.isConnected) {
+                    disconnectWallet();
+                } else {
+                    connectWallet();
+                }
+            });
+        }
+
+        // Setup wallet events
+        function setupWalletEvents() {
+            window.addEventListener('walletChanged', function (event) {
+                updateWalletUI(event.detail);
+            });
+
+            // Initialize wallet UI on page load
+            if (window.simpleWalletManager) {
+                // Check if already connected
+                if (window.simpleWalletManager.isConnected) {
+                    updateWalletUI(window.simpleWalletManager.getWalletInfo());
+                } else {
+                    // Try to auto-connect to Phantom if available
+                    if (window.simpleWalletManager.isPhantomAvailable()) {
+                        console.log('🔄 Auto-connecting to Phantom...');
+                        window.simpleWalletManager.connect().then(success => {
+                            if (success) {
+                                updateWalletUI(window.simpleWalletManager.getWalletInfo());
+                                showToast('Успех', 'Phantom кошелек автоматически подключен!', 'success');
+                            } else {
+                                showConnectWalletButton();
+                            }
+                        }).catch(error => {
+                            console.log('Auto-connect failed:', error);
+                            showConnectWalletButton();
+                        });
+                    } else {
+                        showConnectWalletButton();
+                    }
+                }
+            }
+        }
+
+        // Show connect wallet div
+        function showConnectWalletButton() {
+            const walletBtn = document.getElementById('walletBtn');
+            walletBtn.innerHTML = '<i class="fas fa-wallet"></i> Подключить кошелек';
+        }
+
+        // Update wallet UI
+        function updateWalletUI(walletInfo) {
+            const walletBtn = document.getElementById('walletBtn');
+
+            if (walletInfo.isConnected) {
+                walletBtn.innerHTML = `
+                    <div class="wallet-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="wallet-info">
+                        <div class="wallet-name">Phantom</div>
+                        <div class="wallet-address">${walletInfo.shortAddress}</div>
+                        <div class="wallet-balance">
+                            <i class="fas fa-coins"></i>
+                            <span id="walletBalance">Загрузка...</span>
+                        </div>
+                        <div class="wallet-status">
+                            <div class="status-dot"></div>
+                            <span>Подключен</span>
+                        </div>
+                    </div>
+                    <div class="wallet-dropdown" id="walletDropdown">
+                        <div class="wallet-dropdown-header">
+                            <div class="wallet-dropdown-title">Информация о кошельке</div>
+                            <button class="wallet-dropdown-close" onclick="closeWalletDropdown()">&times;</button>
+                        </div>
+                        <div class="wallet-dropdown-info">
+                            <div class="wallet-dropdown-item">
+                                <div class="wallet-dropdown-label">Кошелек</div>
+                                <div class="wallet-dropdown-value">Phantom</div>
+                            </div>
+                            <div class="wallet-dropdown-item">
+                                <div class="wallet-dropdown-label">Адрес</div>
+                                <div class="wallet-dropdown-value" id="fullWalletAddress">${walletInfo.address || 'Неизвестно'}</div>
+                            </div>
+                            <div class="wallet-dropdown-item">
+                                <div class="wallet-dropdown-label">Баланс</div>
+                                <div class="wallet-dropdown-value" id="dropdownWalletBalance">Загрузка...</div>
+                            </div>
+                            <div class="wallet-dropdown-item">
+                                <div class="wallet-dropdown-label">Статус</div>
+                                <div class="wallet-dropdown-value" style="color: #10b981;">Подключен</div>
+                            </div>
+                        </div>
+                        <div class="wallet-dropdown-actions">
+                            <button class="wallet-dropdown-btn wallet-dropdown-btn-secondary" onclick="copyWalletAddress()">
+                                <i class="fas fa-copy"></i> Копировать
+                            </button>
+                            <button class="wallet-dropdown-btn wallet-dropdown-btn-primary" onclick="disconnectWallet()">
+                                <i class="fas fa-sign-out-alt"></i> Отключить
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Загрузить баланс и детали
+                if (walletInfo.address) {
+                    loadWalletBalance(walletInfo.address);
+                    updateWalletDetails(walletInfo.address);
+                }
+            } else {
+                walletBtn.innerHTML = '<i class="fas fa-wallet"></i> Подключить кошелек';
+            }
+        }
+
+        // Загрузить баланс кошелька с реальными данными
+        async function loadWalletBalance(address) {
+            try {
+                console.log('🔄 Загружаем баланс для адреса:', address);
+
+                // Проверяем доступность Solana Web3.js
+                if (typeof window.solanaWeb3 !== 'undefined') {
+                    console.log('✅ Solana Web3.js загружен');
+
+                    const publicKey = new window.solanaWeb3.PublicKey(address);
+                    const connection = new window.solanaWeb3.Connection(
+                        'https://api.devnet.solana.com', // Используем devnet для тестирования
+                        'confirmed'
+                    );
+
+                    console.log('🔄 Получаем баланс с Solana RPC...');
+
+                    // Получаем реальный баланс
+                    const balance = await connection.getBalance(publicKey);
+                    const solBalance = balance / window.solanaWeb3.LAMPORTS_PER_SOL;
+
+                    console.log(`💰 Реальный баланс: ${solBalance.toFixed(4)} SOL (${balance} lamports)`);
+
+                    // Обновляем UI с реальным балансом
+                    const balanceElement = document.getElementById('walletBalance');
+                    const dropdownBalanceElement = document.getElementById('dropdownWalletBalance');
+
+                    const balanceText = `${solBalance.toFixed(4)} SOL`;
+
+                    if (balanceElement) {
+                        balanceElement.textContent = balanceText;
+                        console.log('✅ Обновлен основной баланс');
+                    }
+                    if (dropdownBalanceElement) {
+                        dropdownBalanceElement.textContent = balanceText;
+                        console.log('✅ Обновлен баланс в dropdown');
+                    }
+
+                    // Получаем информацию о токенах (SPL токены)
+                    try {
+                        const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
+                            programId: new window.solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+                        });
+
+                        if (tokenAccounts.value.length > 0) {
+                            console.log(`📊 Найдено ${tokenAccounts.value.length} токенов в кошельке`);
+                        }
+                    } catch (tokenError) {
+                        console.log('⚠️ Ошибка загрузки токенов:', tokenError);
+                    }
+
+                } else {
+                    console.log('❌ Solana Web3.js не загружен, используем fallback');
+
+                    // Fallback - показываем заглушку
+                    const balanceElement = document.getElementById('walletBalance');
+                    const dropdownBalanceElement = document.getElementById('dropdownWalletBalance');
+
+                    if (balanceElement) {
+                        balanceElement.textContent = 'Загрузка...';
+                    }
+                    if (dropdownBalanceElement) {
+                        dropdownBalanceElement.textContent = 'Загрузка...';
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Ошибка загрузки баланса:', error);
+                const balanceElement = document.getElementById('walletBalance');
+                const dropdownBalanceElement = document.getElementById('dropdownWalletBalance');
+
+                if (balanceElement) {
+                    balanceElement.textContent = 'Ошибка загрузки';
+                }
+                if (dropdownBalanceElement) {
+                    dropdownBalanceElement.textContent = 'Ошибка загрузки';
+                }
+            }
+        }
+
+        // Toggle wallet dropdown
+        function toggleWalletDropdown() {
+            const dropdown = document.getElementById('walletDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Close wallet dropdown
+        function closeWalletDropdown() {
+            const dropdown = document.getElementById('walletDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+        }
+
+        // Copy wallet address
+        function copyWalletAddress() {
+            if (window.simpleWalletManager && window.simpleWalletManager.walletAddress) {
+                navigator.clipboard.writeText(window.simpleWalletManager.walletAddress).then(() => {
+                    showToast('Успех', 'Адрес кошелька скопирован в буфер обмена', 'success');
+                }).catch(() => {
+                    showToast('Ошибка', 'Не удалось скопировать адрес', 'error');
+                });
+            }
+        }
+
+        // Получить дополнительную информацию о кошельке
+        async function getWalletDetails(address) {
+            try {
+                if (typeof window.solanaWeb3 !== 'undefined') {
+                    const publicKey = new window.solanaWeb3.PublicKey(address);
+                    const connection = new window.solanaWeb3.Connection(
+                        'https://api.devnet.solana.com',
+                        'confirmed'
+                    );
+
+                    // Получаем информацию об аккаунте
+                    const accountInfo = await connection.getAccountInfo(publicKey);
+                    const balance = await connection.getBalance(publicKey);
+                    const solBalance = balance / window.solanaWeb3.LAMPORTS_PER_SOL;
+
+                    // Получаем SPL токены
+                    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
+                        programId: new window.solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+                    });
+
+                    return {
+                        solBalance: solBalance,
+                        tokenCount: tokenAccounts.value.length,
+                        accountInfo: accountInfo,
+                        tokens: tokenAccounts.value
+                    };
+                }
+            } catch (error) {
+                console.error('Ошибка получения деталей кошелька:', error);
+                return null;
+            }
+        }
+
+        // Обновить детальную информацию в dropdown
+        async function updateWalletDetails(address) {
+            const details = await getWalletDetails(address);
+            if (details) {
+                // Обновляем баланс в dropdown
+                const dropdownBalanceElement = document.getElementById('dropdownWalletBalance');
+                if (dropdownBalanceElement) {
+                    dropdownBalanceElement.textContent = `${details.solBalance.toFixed(4)} SOL`;
+                }
+
+                // Показываем количество токенов
+                console.log(`📊 Детали кошелька: ${details.solBalance.toFixed(4)} SOL, ${details.tokenCount} токенов`);
+            }
+        }
+
+        // Load assets from API
+        async function loadAssets() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets`);
+                const data = await response.json();
+
+                if (data.success) {
+                    assets = data.data;
+                    renderAssets(assets);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error loading assets:', error);
+                // Show mock data if API fails
+                assets = [
+                    {
+                        asset_id: 'HUMANITY_001',
+                        name: 'Чистая вода для Африки',
+                        description: 'Проект по обеспечению чистой питьевой водой 1 миллиона людей в Африке',
+                        image_url: 'https://images.unsplash.com/photo-1541544181051-e46607bc22b4?w=400',
+                        price_per_token: 0.001,
+                        remaining_supply: 800000,
+                        total_supply: 1000000,
+                        category: 'environment',
+                        creator_name: 'WaterForAll',
+                        creator_avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100'
+                    },
+                    {
+                        asset_id: 'HUMANITY_002',
+                        name: 'Образование для всех',
+                        description: 'Онлайн-платформа бесплатного образования для развивающихся стран',
+                        image_url: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400',
+                        price_per_token: 0.002,
+                        remaining_supply: 300000,
+                        total_supply: 500000,
+                        category: 'education',
+                        creator_name: 'EduGlobal',
+                        creator_avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100'
+                    }
+                ];
+                renderAssets(assets);
+            }
+        }
+
+        // Update stats
+        async function updateStats() {
+            try {
+                const response = await fetch(`${API_BASE}/api/analytics`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('totalAssets').textContent = data.data.total_assets || 0;
+                    document.getElementById('totalVolume').textContent = `${data.data.total_volume || 0} SOL`;
+                    document.getElementById('totalUsers').textContent = data.data.total_participants || 0;
+                    document.getElementById('totalImpact').textContent = data.data.total_impact || 0;
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                // Set default values
+                document.getElementById('totalAssets').textContent = assets.length;
+                document.getElementById('totalVolume').textContent = '0 SOL';
+                document.getElementById('totalUsers').textContent = '0';
+                document.getElementById('totalImpact').textContent = '0';
+            }
+        }
+
+        // Render assets
+        function renderAssets(assetsData) {
+            const grid = document.getElementById('assetsGrid');
+            grid.innerHTML = '';
+
+            assetsData.forEach(asset => {
+                const categoryNames = {
+                    'environment': 'Экология',
+                    'healthcare': 'Здравоохранение',
+                    'education': 'Образование',
+                    'poverty': 'Борьба с бедностью',
+                    'technology': 'Технологии',
+                    'other': 'Другое'
+                };
+
+                const assetCard = document.createElement('div');
+                assetCard.className = 'asset-card';
+                assetCard.innerHTML = `
+                    <div class="asset-image">
+                        ${asset.image_url ?
+                        `<img src="${asset.image_url}" alt="${asset.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="asset-placeholder" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 4rem; color: #10b981;">
+                            <i class="fas fa-heart"></i>
+                        </div>` :
+                        '<i class="fas fa-heart"></i>'
+                    }
+                        <div class="asset-badge">${categoryNames[asset.category] || 'Проект'}</div>
+                    </div>
+                    <div class="asset-info">
+                        <h3 class="asset-title">${asset.name}</h3>
+                        <div class="asset-creator">
+                            <img src="${asset.creator_avatar || 'https://via.placeholder.com/24'}" alt="Creator" class="creator-avatar">
+                            <span>${asset.creator_name || (asset.creator_address === window.simpleWalletManager?.walletAddress ? 'Вы' : 'Unknown')}</span>
+                        </div>
+                        <div class="asset-price">${asset.price_per_token} SOL</div>
+                        <div class="asset-supply">${parseInt(asset.remaining_supply).toLocaleString()}/${parseInt(asset.total_supply).toLocaleString()} токенов</div>
+                        <div class="asset-actions">
+                            ${(asset.project_type === 'donation' || asset.project_type === 'both' || !asset.project_type) ?
+                        `<button class="btn btn-primary" onclick="buyAsset('${asset.asset_id}')">
+                                    <i class="fas fa-heart"></i>
+                                    Пожертвовать
+                                </button>` : ''
+                    }
+                            ${(asset.project_type === 'investment' || asset.project_type === 'both' || !asset.project_type) ?
+                        `<button class="btn btn-secondary" onclick="investAsset('${asset.asset_id}')">
+                                    <i class="fas fa-chart-line"></i>
+                                    Инвестировать
+                                </button>` : ''
+                    }
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(assetCard);
+            });
+        }
+
+        // Wallet functions - Simple version with alert dialog
+        async function connectWallet() {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            if (!window.simpleWalletManager.isPhantomAvailable()) {
+                showToast('Ошибка', 'Phantom кошелек не установлен! Установите Phantom кошелек с https://phantom.app', 'error');
+                return;
+            }
+
+            try {
+                // First try to force Phantom popup to open
+                console.log('🔄 Attempting to open Phantom popup...');
+                await window.simpleWalletManager.forcePhantomPopup();
+
+                // Then try to connect
+                const success = await window.simpleWalletManager.connect();
+                if (success) {
+                    updateWalletUI(window.simpleWalletManager.getWalletInfo());
+                    showToast('Успех', 'Кошелек успешно подключен!', 'success');
+                    loadAssets();
+                }
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                showToast('Ошибка', 'Ошибка подключения кошелька', 'error');
+            }
+        }
+
+        async function disconnectWallet() {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            try {
+                await window.simpleWalletManager.disconnectWithAlert();
+                showConnectWalletButton();
+                showToast('Успех', 'Кошелек отключен', 'success');
+            } catch (error) {
+                console.error('Wallet disconnection error:', error);
+                showToast('Ошибка', 'Ошибка отключения кошелька', 'error');
+            }
+        }
+
+        // Asset functions
+        function buyAsset(assetId) {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            if (!window.simpleWalletManager.isConnected) {
+                showToast('Ошибка', 'Сначала подключите кошелек!', 'error');
+                return;
+            }
+
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (asset) {
+                currentDonationAsset = asset;
+                document.getElementById('donationProjectName').textContent = asset.name;
+                document.getElementById('donationAmount').value = '0.1';
+                document.getElementById('donationModal').classList.add('show');
+            }
+        }
+
+        function investAsset(assetId) {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            if (!window.simpleWalletManager.isConnected) {
+                showToast('Ошибка', 'Сначала подключите кошелек!', 'error');
+                return;
+            }
+
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (asset) {
+                currentDonationAsset = asset;
+                document.getElementById('investmentProjectName').textContent = asset.name;
+                document.getElementById('investmentAmount').value = '10';
+                updateInvestmentTotal();
+                document.getElementById('investmentModal').classList.add('show');
+            }
+        }
+
+
+
+        // Process donation
+        async function processDonation(assetId, amount) {
+            try {
+                showToast('Информация', 'Обрабатываем пожертвование...', 'info');
+
+                const response = await fetch(`${API_BASE}/api/transactions/donate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        donor_address: window.simpleWalletManager.walletAddress,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Успех', 'Пожертвование успешно! Спасибо за поддержку проекта!', 'success');
+                    loadAssets(); // Reload assets
+                } else {
+                    showToast('Ошибка', `Ошибка пожертвования: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Donation error:', error);
+                showToast('Ошибка', `Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        // Process buy
+        async function processBuy(assetId, amount) {
+            try {
+                showToast('Информация', 'Обрабатываем покупку...', 'info');
+
+                const response = await fetch(`${API_BASE}/api/transactions/buy`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        buyer_address: window.simpleWalletManager.walletAddress,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Успех', `Покупка успешна! Вы приобрели ${amount} токенов!`, 'success');
+                    loadAssets(); // Reload assets
+                } else {
+                    showToast('Ошибка', `Ошибка покупки: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Buy error:', error);
+                showToast('Ошибка', `Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+
+
+        async function buyAssetTokens(assetId, amount) {
+            try {
+                const response = await fetch(`${API_BASE}/api/transactions/buy`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        buyer_address: window.solanaWalletManager.walletAddress,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage(`❤️ Спасибо за ваше пожертвование! Вы поддержали проект на ${amount.toLocaleString()} токенов!`, 'success');
+                    loadAssets(); // Reload assets
+                    updateStats(); // Update stats
+                } else {
+                    showMessage(`❌ Ошибка: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error buying tokens:', error);
+                showMessage('Ошибка при поддержке проекта', 'error');
+            }
+        }
+
+        function viewAsset(assetId) {
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (asset) {
+                showToast('Информация о проекте', `Проект: ${asset.name}\nОписание: ${asset.description}\nЦена: ${asset.price_per_token} SOL\nОстаток: ${parseInt(asset.remaining_supply).toLocaleString()}/${parseInt(asset.total_supply).toLocaleString()}`, 'info');
+            }
+        }
+
+
+        async function handleCreateAsset(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const assetData = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                image_url: formData.get('image_url'),
+                total_supply: parseInt(formData.get('total_supply')),
+                price_per_token: parseFloat(formData.get('price_per_token')),
+                category: formData.get('category'),
+                creator_address: window.simpleWalletManager.walletAddress
+            };
+
+            const resultDiv = document.getElementById('createResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'message';
+            resultDiv.innerHTML = '<div class="spinner"></div> Создание проекта...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/assets/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(assetData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.className = 'message success';
+                    resultDiv.innerHTML = '✅ Проект успешно создан! Спасибо за вклад в решение проблем человечества!';
+                    loadAssets(); // Reload assets
+                    updateStats(); // Update stats
+                    // Modal closed automatically
+                } else {
+                    resultDiv.className = 'message error';
+                    resultDiv.innerHTML = `❌ Ошибка: ${data.error}`;
+                }
+            } catch (error) {
+                console.error('Error creating asset:', error);
+                resultDiv.className = 'message error';
+                resultDiv.innerHTML = '❌ Ошибка при создании проекта';
+            }
+        }
+
+        // Navigation functions
+        function showExplore() {
+            // Scroll to assets section
+            document.querySelector('.assets-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showCreate() {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            if (!window.simpleWalletManager.isConnected) {
+                showToast('Ошибка', 'Сначала подключите кошелек!', 'error');
+                return;
+            }
+
+            // Очистить форму
+            document.getElementById('createProjectForm').reset();
+            document.getElementById('createProjectModal').classList.add('show');
+        }
+
+        function showImpact() {
+            // Scroll to stats section
+            document.querySelector('.stats').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showProfile() {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            if (!window.simpleWalletManager.isConnected) {
+                showToast('Ошибка', 'Сначала подключите кошелек!', 'error');
+                return;
+            }
+
+            // Открываем модальный профиль
+            const profileModal = document.getElementById('profileModal');
+            profileModal.classList.add('show');
+
+            // Загружаем данные профиля
+            loadProfileData();
+        }
+
+        // Загрузить данные профиля
+        async function loadProfileData() {
+            if (window.simpleWalletManager && window.simpleWalletManager.isConnected) {
+                const walletInfo = window.simpleWalletManager.getWalletInfo();
+
+                // Обновляем адрес
+                const profileAddress = document.getElementById('profileAddress');
+                if (profileAddress) {
+                    profileAddress.textContent = walletInfo.address || 'Неизвестно';
+                }
+
+                // Загружаем баланс
+                if (walletInfo.address) {
+                    await loadProfileBalance(walletInfo.address);
+                }
+            }
+        }
+
+        // Загрузить баланс для профиля
+        async function loadProfileBalance(address) {
+            try {
+                if (typeof window.solanaWeb3 !== 'undefined') {
+                    const publicKey = new window.solanaWeb3.PublicKey(address);
+                    const connection = new window.solanaWeb3.Connection(
+                        'https://api.devnet.solana.com',
+                        'confirmed'
+                    );
+
+                    const balance = await connection.getBalance(publicKey);
+                    const solBalance = balance / window.solanaWeb3.LAMPORTS_PER_SOL;
+
+                    const profileBalance = document.getElementById('profileBalance');
+                    if (profileBalance) {
+                        profileBalance.textContent = `${solBalance.toFixed(4)} SOL`;
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки баланса профиля:', error);
+                const profileBalance = document.getElementById('profileBalance');
+                if (profileBalance) {
+                    profileBalance.textContent = 'Ошибка загрузки';
+                }
+            }
+        }
+
+        // Закрыть профиль
+        function closeProfileModal() {
+            const profileModal = document.getElementById('profileModal');
+            profileModal.classList.remove('show');
+        }
+
+        // Копировать адрес из профиля
+        function copyProfileAddress() {
+            if (window.simpleWalletManager && window.simpleWalletManager.walletAddress) {
+                navigator.clipboard.writeText(window.simpleWalletManager.walletAddress).then(() => {
+                    showToast('Успех', 'Адрес кошелька скопирован в буфер обмена', 'success');
+                }).catch(() => {
+                    showToast('Ошибка', 'Не удалось скопировать адрес', 'error');
+                });
+            }
+        }
+
+        // ===== СИСТЕМА БЕЗОПАСНОСТИ =====
+
+        // Проверка безопасности транзакций
+        function validateTransaction(amount, type) {
+            const security = {
+                isValid: true,
+                warnings: [],
+                errors: []
+            };
+
+            // Проверка суммы
+            if (!amount || amount <= 0) {
+                security.errors.push('Сумма должна быть больше 0');
+                security.isValid = false;
+            }
+
+            if (amount > 1000) {
+                security.warnings.push('Большая сумма транзакции. Убедитесь в правильности данных.');
+            }
+
+            // Проверка типа транзакции
+            if (!type || !['donation', 'investment', 'buy'].includes(type)) {
+                security.errors.push('Неверный тип транзакции');
+                security.isValid = false;
+            }
+
+            return security;
+        }
+
+        // Проверка подключения кошелька
+        function validateWalletConnection() {
+            if (!window.simpleWalletManager) {
+                return {
+                    isValid: false,
+                    error: 'Кошелек не инициализирован'
+                };
+            }
+
+            if (!window.simpleWalletManager.isConnected) {
+                return {
+                    isValid: false,
+                    error: 'Кошелек не подключен'
+                };
+            }
+
+            if (!window.simpleWalletManager.walletAddress) {
+                return {
+                    isValid: false,
+                    error: 'Адрес кошелька не найден'
+                };
+            }
+
+            return {
+                isValid: true,
+                address: window.simpleWalletManager.walletAddress
+            };
+        }
+
+        // Безопасная отправка транзакции
+        async function secureTransaction(amount, type, assetId) {
+            try {
+                // 1. Проверка подключения кошелька
+                const walletCheck = validateWalletConnection();
+                if (!walletCheck.isValid) {
+                    showToast('Ошибка безопасности', walletCheck.error, 'error');
+                    return false;
+                }
+
+                // 2. Проверка валидности транзакции
+                const transactionCheck = validateTransaction(amount, type);
+                if (!transactionCheck.isValid) {
+                    showToast('Ошибка валидации', transactionCheck.errors.join(', '), 'error');
+                    return false;
+                }
+
+                // 3. Показ предупреждений
+                if (transactionCheck.warnings.length > 0) {
+                    const confirmed = confirm(`⚠️ Предупреждение:\n${transactionCheck.warnings.join('\n')}\n\nПродолжить транзакцию?`);
+                    if (!confirmed) {
+                        return false;
+                    }
+                }
+
+                // 4. Дополнительное подтверждение для больших сумм
+                if (amount > 100) {
+                    const confirmed = confirm(`💰 Большая сумма: ${amount} SOL\n\nВы уверены, что хотите продолжить?`);
+                    if (!confirmed) {
+                        return false;
+                    }
+                }
+
+                // 5. Логирование для безопасности
+                console.log('🔒 Безопасная транзакция:', {
+                    amount,
+                    type,
+                    assetId,
+                    wallet: walletCheck.address,
+                    timestamp: new Date().toISOString()
+                });
+
+                return true;
+
+            } catch (error) {
+                console.error('❌ Ошибка безопасности:', error);
+                showToast('Ошибка безопасности', 'Произошла ошибка при проверке безопасности', 'error');
+                return false;
+            }
+        }
+
+        // Проверка безопасности API запросов
+        function validateApiRequest(endpoint, data) {
+            const security = {
+                isValid: true,
+                errors: []
+            };
+
+            // Проверка endpoint
+            if (!endpoint || typeof endpoint !== 'string') {
+                security.errors.push('Неверный endpoint');
+                security.isValid = false;
+            }
+
+            // Проверка данных
+            if (data && typeof data !== 'object') {
+                security.errors.push('Данные должны быть объектом');
+                security.isValid = false;
+            }
+
+            // Проверка на XSS
+            if (data && JSON.stringify(data).includes('<script>')) {
+                security.errors.push('Обнаружена попытка XSS атаки');
+                security.isValid = false;
+            }
+
+            return security;
+        }
+
+        // Безопасный API запрос
+        async function secureApiRequest(endpoint, options = {}) {
+            try {
+                // Проверка безопасности запроса
+                const validation = validateApiRequest(endpoint, options.body);
+                if (!validation.isValid) {
+                    showToast('Ошибка безопасности', validation.errors.join(', '), 'error');
+                    return null;
+                }
+
+                // Добавление заголовков безопасности
+                const secureOptions = {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        ...options.headers
+                    }
+                };
+
+                const response = await fetch(endpoint, secureOptions);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return await response.json();
+
+            } catch (error) {
+                console.error('❌ Ошибка API запроса:', error);
+                showToast('Ошибка сети', 'Не удалось выполнить запрос', 'error');
+                return null;
+            }
+        }
+
+        // Система мониторинга безопасности
+        function setupSecurityMonitoring() {
+            // Мониторинг подозрительной активности
+            let transactionCount = 0;
+            const transactionLimit = 10; // Максимум 10 транзакций в минуту
+            const timeWindow = 60000; // 1 минута
+
+            setInterval(() => {
+                transactionCount = 0; // Сброс счетчика каждую минуту
+            }, timeWindow);
+
+            // Перехват всех транзакций
+            const originalBuyAsset = window.buyAsset;
+            const originalInvestAsset = window.investAsset;
+
+            window.buyAsset = async function (assetId) {
+                transactionCount++;
+                if (transactionCount > transactionLimit) {
+                    showToast('Блокировка безопасности', 'Слишком много транзакций. Попробуйте позже.', 'error');
+                    return;
+                }
+                return originalBuyAsset.call(this, assetId);
+            };
+
+            window.investAsset = async function (assetId) {
+                transactionCount++;
+                if (transactionCount > transactionLimit) {
+                    showToast('Блокировка безопасности', 'Слишком много транзакций. Попробуйте позже.', 'error');
+                    return;
+                }
+                return originalInvestAsset.call(this, assetId);
+            };
+
+            console.log('🔒 Система безопасности активирована');
+        }
+
+        // Инициализация системы безопасности
+        function initSecuritySystem() {
+            setupSecurityMonitoring();
+            console.log('🛡️ Система безопасности инициализирована');
+        }
+
+        // Create asset function
+        async function createAsset(assetData) {
+            try {
+                showToast('Информация', 'Создаем проект...', 'info');
+
+                const response = await fetch(`${API_BASE}/api/assets/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(assetData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Успех', `Проект "${assetData.name}" успешно создан! ID проекта: ${data.asset_id}`, 'success');
+                    loadAssets(); // Reload assets
+                } else {
+                    showToast('Ошибка', `Ошибка создания проекта: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Create asset error:', error);
+                showToast('Ошибка', `Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        // Profile functions
+        async function loadUserProfile() {
+            const profileContent = document.getElementById('profileContent');
+            const walletInfo = window.simpleWalletManager.getWalletInfo();
+
+            try {
+                // Load user's assets
+                const assetsResponse = await fetch(`${API_BASE}/api/assets/user/${walletInfo.address}`);
+                const assetsData = await assetsResponse.json();
+
+                // Load user's transactions
+                const transactionsResponse = await fetch(`${API_BASE}/api/transactions/history/${walletInfo.address}`);
+                const transactionsData = await transactionsResponse.json();
+
+                profileContent.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="stat-card">
+                            <div class="stat-number">${assetsData.data ? assetsData.data.length : 0}</div>
+                            <div class="stat-label">Мои проекты</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${transactionsData.data ? transactionsData.data.length : 0}</div>
+                            <div class="stat-label">Транзакций</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 1rem; color: #10b981;">Информация о кошельке</h4>
+                        <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                            <p><strong>Адрес:</strong> ${walletInfo.address}</p>
+                            <p><strong>Тип:</strong> ${walletInfo.wallet}</p>
+                            <p><strong>Статус:</strong> <span style="color: #10b981;">Подключен</span></p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 1rem; color: #10b981;">Мои проекты</h4>
+                        <div id="userAssetsList">
+                            ${assetsData.data && assetsData.data.length > 0 ?
+                        assetsData.data.map(asset => `
+                                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                        <h5>${asset.name}</h5>
+                                        <p style="color: #9ca3af; font-size: 0.9rem;">${asset.description}</p>
+                                        <p style="color: #10b981; font-weight: 600;">${asset.price_per_token} SOL за токен</p>
+                                    </div>
+                                `).join('') :
+                        '<p style="color: #9ca3af;">У вас пока нет созданных проектов</p>'
+                    }
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="margin-bottom: 1rem; color: #10b981;">Последние транзакции</h4>
+                        <div id="userTransactionsList">
+                            ${transactionsData.data && transactionsData.data.length > 0 ?
+                        transactionsData.data.slice(0, 5).map(tx => `
+                                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="color: #10b981; font-weight: 600;">${tx.transaction_type.toUpperCase()}</span>
+                                            <span style="color: #9ca3af; font-size: 0.9rem;">${new Date(tx.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                        <p style="color: #ffffff; margin: 0.5rem 0;">${tx.amount.toLocaleString()} токенов</p>
+                                        <p style="color: #9ca3af; font-size: 0.9rem; margin: 0;">${tx.total_amount} SOL</p>
+                                    </div>
+                                `).join('') :
+                        '<p style="color: #9ca3af;">У вас пока нет транзакций</p>'
+                    }
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                profileContent.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <p style="color: #ef4444;">Ошибка загрузки профиля</p>
+                        <button class="btn btn-primary" onclick="loadUserProfile()">Попробовать снова</button>
+                    </div>
+                `;
+            }
+        }
+
+
+        // Utility functions
+        function showToast(title, message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <span class="toast-icon">${icon}</span>
+                    <span class="toast-title">${title}</span>
+                </div>
+                <div class="toast-message">${message}</div>
+            `;
+
+            // Get existing toasts to calculate position
+            const existingToasts = document.querySelectorAll('.toast');
+            const toastIndex = existingToasts.length;
+            const topOffset = 20 + (toastIndex * 80); // 80px spacing between toasts
+
+            toast.style.top = `${topOffset}px`;
+
+            document.body.appendChild(toast);
+
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Hide and remove after 4 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                        // Reposition remaining toasts
+                        repositionToasts();
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        function repositionToasts() {
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach((toast, index) => {
+                const topOffset = 20 + (index * 80);
+                toast.style.top = `${topOffset}px`;
+            });
+        }
+
+        function showMessage(message, type) {
+            showToast(type === 'success' ? 'Успех' : 'Ошибка', message, type);
+        }
+
+        function showBusiness() {
+            if (!window.simpleWalletManager) {
+                showToast('Ошибка', 'Кошелек не инициализирован. Перезагрузите страницу.', 'error');
+                return;
+            }
+
+            if (!window.simpleWalletManager.isConnected) {
+                showToast('Ошибка', 'Сначала подключите кошелек!', 'error');
+                return;
+            }
+
+            // Hide other sections
+            const sections = ['exploreSection', 'createSection', 'impactSection', 'profileSection'];
+            sections.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.style.display = 'none';
+            });
+
+            // Show business section
+            const businessSection = document.getElementById('businessSection');
+            if (businessSection) {
+                businessSection.style.display = 'block';
+                showToast('Бизнес', 'Загружаем бизнес-инструменты...', 'info');
+                // Load business data
+                loadBusinessData();
+            } else {
+                showToast('Ошибка', 'Бизнес-секция не найдена', 'error');
+            }
+        }
+
+        function showAnalytics() {
+            showToast('Аналитика', 'Открываем детальную аналитику...', 'info');
+        }
+
+        function showDividends() {
+            showToast('Дивиденды', 'Управление дивидендами...', 'info');
+        }
+
+        function showTrading() {
+            showToast('Торговля', 'Открываем торговую площадку...', 'info');
+        }
+
+        function showPortfolio() {
+            showToast('Портфель', 'Загружаем ваш портфель...', 'info');
+        }
+
+        // Business functions
+        async function loadBusinessData() {
+            try {
+                // Load analytics
+                const analyticsResponse = await fetch(`${API_BASE}/api/analytics`);
+                const analyticsData = await analyticsResponse.json();
+
+                if (analyticsData.success) {
+                    document.getElementById('totalRevenue').textContent = `${analyticsData.data.total_volume || 0} SOL`;
+                    document.getElementById('totalDividends').textContent = `${analyticsData.data.total_dividends || 0} SOL`;
+                    document.getElementById('activeProjects').textContent = analyticsData.data.total_assets || 0;
+                    document.getElementById('totalHolders').textContent = analyticsData.data.total_participants || 0;
+                }
+
+                // Load assets for dropdowns
+                const assetsResponse = await fetch(`${API_BASE}/api/assets`);
+                const assetsData = await assetsResponse.json();
+
+                if (assetsData.success) {
+                    const dividendSelect = document.getElementById('dividendAsset');
+                    const sellSelect = document.getElementById('sellAsset');
+                    const buySelect = document.getElementById('buyAsset');
+
+                    // Clear existing options
+                    [dividendSelect, sellSelect, buySelect].forEach(select => {
+                        select.innerHTML = '<option value="">Выберите проект...</option>';
+                    });
+
+                    // Add assets
+                    assetsData.data.forEach(asset => {
+                        const option = `<option value="${asset.asset_id}">${asset.name}</option>`;
+                        [dividendSelect, sellSelect, buySelect].forEach(select => {
+                            select.innerHTML += option;
+                        });
+                    });
+
+                    // Create test token holders for demonstration
+                    await createTestTokenHolders(assetsData.data);
+                }
+
+                // Load portfolio
+                loadPortfolio();
+
+            } catch (error) {
+                console.error('Error loading business data:', error);
+                showToast('Ошибка', 'Не удалось загрузить данные', 'error');
+            }
+        }
+
+        async function createTestTokenHolders(assets) {
+            try {
+                // Create test holders for first few assets
+                const testHolders = [
+                    { address: '6n3SawLQmdFxPNSuHfUFToMqoJzmfH36rqKwxDL9w1D1', amount: 1000 },
+                    { address: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j', amount: 500 },
+                    { address: '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM', amount: 300 }
+                ];
+
+                for (let i = 0; i < Math.min(3, assets.length); i++) {
+                    const asset = assets[i];
+                    for (const holder of testHolders) {
+                        try {
+                            await fetch(`${API_BASE}/api/dividends/update-holder`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    asset_id: asset.asset_id,
+                                    holder_address: holder.address,
+                                    token_amount: holder.amount,
+                                    transaction_type: 'buy'
+                                })
+                            });
+                        } catch (error) {
+                            // Ignore errors for test data
+                        }
+                    }
+                }
+            } catch (error) {
+                // Ignore errors for test data
+            }
+        }
+
+        async function distributeDividends() {
+            const assetId = document.getElementById('dividendAsset').value;
+            const amount = parseFloat(document.getElementById('dividendAmount').value);
+
+            if (!assetId || !amount || amount <= 0) {
+                showToast('Ошибка', 'Заполните все поля корректно', 'error');
+                return;
+            }
+
+            try {
+                showToast('Информация', 'Распределяем дивиденды...', 'info');
+
+                const response = await fetch(`${API_BASE}/api/dividends/distribute`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        total_revenue: amount,
+                        creator_address: window.simpleWalletManager.walletAddress
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Успех', `Дивиденды распределены! Выплачено ${data.data.total_holders} владельцам`, 'success');
+                    document.getElementById('dividendAmount').value = '';
+                } else {
+                    showToast('Ошибка', data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Dividend distribution error:', error);
+                showToast('Ошибка', 'Ошибка распределения дивидендов', 'error');
+            }
+        }
+
+        function showTradingTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide content
+            document.getElementById('sellTokens').style.display = tab === 'sell' ? 'block' : 'none';
+            document.getElementById('buyTokens').style.display = tab === 'buy' ? 'block' : 'none';
+        }
+
+        async function createSellOrder() {
+            const assetId = document.getElementById('sellAsset').value;
+            const amount = parseInt(document.getElementById('sellAmount').value);
+            const price = parseFloat(document.getElementById('sellPrice').value);
+
+            if (!assetId || !amount || !price || amount <= 0 || price <= 0) {
+                showToast('Ошибка', 'Заполните все поля корректно', 'error');
+                return;
+            }
+
+            try {
+                showToast('Информация', 'Создаем ордер на продажу...', 'info');
+
+                const response = await fetch(`${API_BASE}/api/transactions/sell`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        seller_address: window.simpleWalletManager.walletAddress,
+                        amount: amount,
+                        price_per_token: price
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Успех', 'Ордер на продажу создан!', 'success');
+                    // Clear form
+                    document.getElementById('sellAmount').value = '';
+                    document.getElementById('sellPrice').value = '';
+                } else {
+                    showToast('Ошибка', data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Sell order error:', error);
+                showToast('Ошибка', 'Ошибка создания ордера', 'error');
+            }
+        }
+
+        async function createBuyOrder() {
+            const assetId = document.getElementById('buyAsset').value;
+            const amount = parseInt(document.getElementById('buyAmount').value);
+            const maxPrice = parseFloat(document.getElementById('buyMaxPrice').value);
+
+            if (!assetId || !amount || !maxPrice || amount <= 0 || maxPrice <= 0) {
+                showToast('Ошибка', 'Заполните все поля корректно', 'error');
+                return;
+            }
+
+            try {
+                showToast('Информация', 'Создаем ордер на покупку...', 'info');
+
+                const response = await fetch(`${API_BASE}/api/transactions/buy`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        buyer_address: window.simpleWalletManager.walletAddress,
+                        amount: amount,
+                        max_price_per_token: maxPrice
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Успех', `Куплено ${data.data.total_executed} токенов!`, 'success');
+                    // Clear form
+                    document.getElementById('buyAmount').value = '';
+                    document.getElementById('buyMaxPrice').value = '';
+                } else {
+                    showToast('Ошибка', data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Buy order error:', error);
+                showToast('Ошибка', 'Ошибка создания ордера', 'error');
+            }
+        }
+
+        async function loadPortfolio() {
+            try {
+                const response = await fetch(`${API_BASE}/api/dividends/user/${window.simpleWalletManager.walletAddress}`);
+                const data = await response.json();
+
+                const portfolioGrid = document.getElementById('portfolioGrid');
+                portfolioGrid.innerHTML = '';
+
+                if (data.success && data.data.length > 0) {
+                    data.data.forEach(payment => {
+                        const portfolioItem = document.createElement('div');
+                        portfolioItem.className = 'portfolio-item';
+                        portfolioItem.innerHTML = `
+                            <h4>${payment.asset_name || 'Неизвестный актив'}</h4>
+                            <div class="portfolio-stats">
+                                <div class="portfolio-stat">
+                                    <div class="portfolio-stat-value">${payment.amount} SOL</div>
+                                    <div class="portfolio-stat-label">Выплата</div>
+                                </div>
+                                <div class="portfolio-stat">
+                                    <div class="portfolio-stat-value">${payment.token_amount}</div>
+                                    <div class="portfolio-stat-label">Токенов</div>
+                                </div>
+                            </div>
+                        `;
+                        portfolioGrid.appendChild(portfolioItem);
+                    });
+                } else {
+                    portfolioGrid.innerHTML = '<p style="color: #9ca3af; text-align: center;">Портфель пуст</p>';
+                }
+            } catch (error) {
+                console.error('Portfolio loading error:', error);
+                document.getElementById('portfolioGrid').innerHTML = '<p style="color: #ef4444; text-align: center;">Ошибка загрузки портфеля</p>';
+            }
+        }
+
+        // Modal functions
+        function closeDonationModal() {
+            document.getElementById('donationModal').classList.remove('show');
+            currentDonationAsset = null;
+        }
+
+        function closeInvestmentModal() {
+            document.getElementById('investmentModal').classList.remove('show');
+            currentDonationAsset = null;
+        }
+
+        function closeCreateProjectModal() {
+            document.getElementById('createProjectModal').classList.remove('show');
+        }
+
+        function setDonationAmount(amount) {
+            document.getElementById('donationAmount').value = amount;
+            document.querySelectorAll('#donationModal .amount-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        function setInvestmentAmount(amount) {
+            document.getElementById('investmentAmount').value = amount;
+            document.querySelectorAll('#investmentModal .amount-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            updateInvestmentTotal();
+        }
+
+        function updateInvestmentTotal() {
+            if (currentDonationAsset) {
+                const amount = document.getElementById('investmentAmount').value;
+                const total = parseFloat(amount) * currentDonationAsset.price_per_token;
+                document.getElementById('investmentTotal').textContent = `$${total.toFixed(2)}`;
+            }
+        }
+
+        function confirmDonation() {
+            const amount = parseFloat(document.getElementById('donationAmount').value);
+            if (!amount || amount <= 0) {
+                showToast('Ошибка', 'Введите корректную сумму', 'error');
+                return;
+            }
+
+            if (currentDonationAsset) {
+                processDonation(currentDonationAsset.asset_id, amount);
+                closeDonationModal();
+            }
+        }
+
+        function confirmInvestment() {
+            const amount = parseInt(document.getElementById('investmentAmount').value);
+            if (!amount || amount <= 0) {
+                showToast('Ошибка', 'Введите корректное количество токенов', 'error');
+                return;
+            }
+
+            if (currentDonationAsset) {
+                processBuy(currentDonationAsset.asset_id, amount);
+                closeInvestmentModal();
+            }
+        }
+
+        // Handle create project form
+        document.getElementById('createProjectForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const projectType = document.querySelector('input[name="projectType"]:checked').value;
+
+            const projectData = {
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDescription').value,
+                image_url: document.getElementById('projectImage').value || 'https://via.placeholder.com/300x200?text=Project',
+                total_supply: parseInt(document.getElementById('projectSupply').value),
+                price_per_token: parseFloat(document.getElementById('projectPrice').value),
+                category: document.getElementById('projectCategory').value,
+                project_type: projectType,
+                creator_address: window.simpleWalletManager.walletAddress
+            };
+
+            createAsset(projectData);
+            closeCreateProjectModal();
+        });
+
+        // Close modals on outside click
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.classList.remove('show');
+            }
+
+            // Close profile modal on outside click
+            if (e.target.classList.contains('profile-modal')) {
+                e.target.classList.remove('show');
+            }
+
+            // Close wallet dropdown on outside click
+            if (!e.target.closest('.wallet-connected') && !e.target.closest('.wallet-dropdown')) {
+                const dropdown = document.getElementById('walletDropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+
+        // Close modals on escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.show').forEach(modal => {
+                    modal.classList.remove('show');
+                });
+
+                // Close profile modal
+                const profileModal = document.getElementById('profileModal');
+                if (profileModal && profileModal.classList.contains('show')) {
+                    profileModal.classList.remove('show');
+                }
+            }
+        });
+
+        // Update investment total when amount changes
+        document.addEventListener('input', function (e) {
+            if (e.target.id === 'investmentAmount') {
+                updateInvestmentTotal();
+            }
+        });
+
+        // Add create button
+        const createButton = document.createElement('button');
+        createButton.innerHTML = '<i class="fas fa-plus"></i>';
+        createButton.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        `;
+        createButton.onclick = showCreate;
+        createButton.onmouseover = function () {
+            this.style.transform = 'scale(1.1)';
+        };
+        createButton.onmouseout = function () {
+            this.style.transform = 'scale(1)';
+        };
+        document.body.appendChild(createButton);
+    </script>
+</body>
+
+</html>

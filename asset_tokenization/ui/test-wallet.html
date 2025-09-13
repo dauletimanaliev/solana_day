@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест интеграции кошельков</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #059669;
+        }
+
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+        }
+
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔧 Тест интеграции кошельков</h1>
+
+    <div class="test-section">
+        <h2>1. Проверка доступности кошельков</h2>
+        <div id="walletStatus"></div>
+        <button onclick="checkWallets()">Проверить кошельки</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Тест подключения Phantom</h2>
+        <div id="phantomStatus"></div>
+        <button onclick="testPhantom()">Подключить Phantom</button>
+        <button onclick="forcePhantom()">Принудительно Phantom</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Тест подключения MetaMask</h2>
+        <div id="metamaskStatus"></div>
+        <button onclick="testMetaMask()">Подключить MetaMask</button>
+        <button onclick="forceMetaMask()">Принудительно MetaMask</button>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Информация о подключенном кошельке</h2>
+        <div id="walletInfo"></div>
+        <button onclick="getWalletInfo()">Получить информацию</button>
+        <button onclick="disconnectWallet()">Отключить кошелек</button>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Логи консоли</h2>
+        <div id="consoleLogs"
+            style="background: #000; padding: 10px; border-radius: 5px; font-family: monospace; max-height: 200px; overflow-y: auto;">
+        </div>
+        <button onclick="clearLogs()">Очистить логи</button>
+    </div>
+
+    <script src="solana-wallet-fixed.js"></script>
+    <script>
+        let logContainer = document.getElementById('consoleLogs');
+
+        // Override console.log to show in UI
+        const originalLog = console.log;
+        console.log = function (...args) {
+            originalLog.apply(console, args);
+            const logEntry = document.createElement('div');
+            logEntry.textContent = args.join(' ');
+            logEntry.style.color = '#10b981';
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        };
+
+        const originalError = console.error;
+        console.error = function (...args) {
+            originalError.apply(console, args);
+            const logEntry = document.createElement('div');
+            logEntry.textContent = args.join(' ');
+            logEntry.style.color = '#ef4444';
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        };
+
+        function addStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function checkWallets() {
+            console.log('🔍 Проверка доступности кошельков...');
+
+            const phantomAvailable = window.solanaWalletManager.isWalletAvailable('phantom');
+            const metamaskAvailable = window.solanaWalletManager.isWalletAvailable('metamask');
+
+            let status = '';
+            status += `Phantom: ${phantomAvailable ? '✅ Доступен' : '❌ Не установлен'}<br>`;
+            status += `MetaMask: ${metamaskAvailable ? '✅ Доступен' : '❌ Не установлен'}<br>`;
+            status += `window.solana: ${window.solana ? '✅ Есть' : '❌ Нет'}<br>`;
+            status += `window.ethereum: ${window.ethereum ? '✅ Есть' : '❌ Нет'}<br>`;
+
+            if (window.solana) {
+                status += `window.solana.isPhantom: ${window.solana.isPhantom ? '✅ Да' : '❌ Нет'}<br>`;
+            }
+            if (window.ethereum) {
+                status += `window.ethereum.isMetaMask: ${window.ethereum.isMetaMask ? '✅ Да' : '❌ Нет'}<br>`;
+            }
+
+            addStatus('walletStatus', status, 'info');
+        }
+
+        async function testPhantom() {
+            try {
+                addStatus('phantomStatus', '🔄 Подключение к Phantom...', 'info');
+                const result = await window.solanaWalletManager.connect('phantom');
+                addStatus('phantomStatus', `✅ Phantom подключен!<br>Адрес: ${result.address}`, 'success');
+            } catch (error) {
+                addStatus('phantomStatus', `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function testMetaMask() {
+            try {
+                addStatus('metamaskStatus', '🔄 Подключение к MetaMask...', 'info');
+                const result = await window.solanaWalletManager.connect('metamask');
+                addStatus('metamaskStatus', `✅ MetaMask подключен!<br>Адрес: ${result.address}`, 'success');
+            } catch (error) {
+                addStatus('metamaskStatus', `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function forcePhantom() {
+            try {
+                addStatus('phantomStatus', '🔧 Принудительное подключение к Phantom...', 'info');
+                const result = await window.solanaWalletManager.forceConnect('phantom');
+                addStatus('phantomStatus', `✅ Phantom принудительно подключен!<br>Адрес: ${result.address}`, 'success');
+            } catch (error) {
+                addStatus('phantomStatus', `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        async function forceMetaMask() {
+            try {
+                addStatus('metamaskStatus', '🔧 Принудительное подключение к MetaMask...', 'info');
+                const result = await window.solanaWalletManager.forceConnect('metamask');
+                addStatus('metamaskStatus', `✅ MetaMask принудительно подключен!<br>Адрес: ${result.address}`, 'success');
+            } catch (error) {
+                addStatus('metamaskStatus', `❌ Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        function getWalletInfo() {
+            const info = window.solanaWalletManager.getWalletInfo();
+            let status = '';
+            status += `Подключен: ${info.isConnected ? '✅ Да' : '❌ Нет'}<br>`;
+            status += `Кошелек: ${info.wallet || 'Не выбран'}<br>`;
+            status += `Адрес: ${info.address || 'Не подключен'}<br>`;
+            status += `Короткий адрес: ${info.shortAddress || 'Не подключен'}<br>`;
+
+            addStatus('walletInfo', status, info.isConnected ? 'success' : 'info');
+        }
+
+        async function disconnectWallet() {
+            try {
+                await window.solanaWalletManager.disconnect();
+                addStatus('walletInfo', '✅ Кошелек отключен', 'success');
+            } catch (error) {
+                addStatus('walletInfo', `❌ Ошибка отключения: ${error.message}`, 'error');
+            }
+        }
+
+        function clearLogs() {
+            logContainer.innerHTML = '';
+        }
+
+        // Auto-check wallets on page load
+        window.addEventListener('load', function () {
+            setTimeout(() => {
+                checkWallets();
+                getWalletInfo();
+            }, 1000);
+        });
+
+        // Listen for wallet changes
+        window.addEventListener('walletChanged', function (event) {
+            console.log('🔄 Кошелек изменился:', event.detail);
+            getWalletInfo();
+        });
+    </script>
+</body>
+
+</html>

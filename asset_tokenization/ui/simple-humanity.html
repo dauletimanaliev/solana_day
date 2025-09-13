@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HumanityToken - Простая версия</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .wallet-btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .wallet-btn.connected {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .asset-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .asset-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .asset-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-description {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .asset-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-donate {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .btn-donate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-buy {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .stats h2 {
+            margin-bottom: 1rem;
+            color: #10b981;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        .wallet-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .wallet-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .wallet-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wallet-address {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .wallet-type {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        .disconnect-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .disconnect-btn:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">❤️ HumanityToken</div>
+        <button class="wallet-btn" id="walletBtn" onclick="toggleWallet()">
+            Подключить кошелек
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Изменим мир вместе</h1>
+            <p>Поддержите гуманитарные проекты через блокчейн технологию</p>
+        </div>
+
+        <div class="stats">
+            <h2>📊 Статистика платформы</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">1,234</div>
+                    <div class="stat-label">Проектов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$45,678</div>
+                    <div class="stat-label">Собрано</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">5,678</div>
+                    <div class="stat-label">Участников</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="assets-grid" id="assetsGrid">
+            <!-- Assets will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Include Simple Wallet -->
+    <script src="simple-wallet.js"></script>
+    <script>
+        // Global variables
+        let assets = [];
+
+        // API configuration
+        const API_BASE = 'http://localhost:3001';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            setupWalletEvents();
+            loadAssets();
+        });
+
+        // Setup wallet events
+        function setupWalletEvents() {
+            window.addEventListener('walletChanged', function (event) {
+                updateWalletUI(event.detail);
+            });
+            
+            // Initialize wallet UI on page load
+            if (window.simpleWalletManager) {
+                updateWalletUI(window.simpleWalletManager.getWalletInfo());
+            }
+        }
+
+        // Update wallet UI
+        function updateWalletUI(walletInfo) {
+            const walletBtn = document.getElementById('walletBtn');
+
+            if (walletInfo.isConnected) {
+                walletBtn.classList.add('connected');
+                walletBtn.innerHTML = `
+                    <div class="wallet-info">
+                        <div class="wallet-avatar">👻</div>
+                        <div class="wallet-details">
+                            <div class="wallet-address">${walletInfo.shortAddress}</div>
+                            <div class="wallet-type">Phantom</div>
+                        </div>
+                        <button onclick="disconnectWallet()" class="disconnect-btn">×</button>
+                    </div>
+                `;
+            } else {
+                walletBtn.classList.remove('connected');
+                walletBtn.innerHTML = 'Подключить кошелек';
+            }
+        }
+
+        // Toggle wallet connection
+        async function toggleWallet() {
+            if (window.simpleWalletManager.isConnected) {
+                await disconnectWallet();
+            } else {
+                await connectWallet();
+            }
+        }
+
+        // Connect wallet
+        async function connectWallet() {
+            try {
+                const success = await window.simpleWalletManager.connect();
+                if (success) {
+                    // Reload assets after connection
+                    loadAssets();
+                }
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+            }
+        }
+
+        // Disconnect wallet
+        async function disconnectWallet() {
+            try {
+                await window.simpleWalletManager.disconnectWithAlert();
+            } catch (error) {
+                console.error('Wallet disconnection error:', error);
+            }
+        }
+
+        // Load assets from API
+        async function loadAssets() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    assets = data.assets;
+                    renderAssets();
+                } else {
+                    console.error('Failed to load assets:', data.error);
+                }
+            } catch (error) {
+                console.error('Error loading assets:', error);
+            }
+        }
+
+        // Render assets
+        function renderAssets() {
+            const assetsGrid = document.getElementById('assetsGrid');
+            assetsGrid.innerHTML = '';
+
+            assets.forEach(asset => {
+                const assetCard = document.createElement('div');
+                assetCard.className = 'asset-card';
+                assetCard.innerHTML = `
+                    <img src="${asset.image_url}" alt="${asset.name}" class="asset-image">
+                    <div class="asset-title">${asset.name}</div>
+                    <div class="asset-description">${asset.description}</div>
+                    <div class="asset-price">$${asset.price_per_token} за токен</div>
+                    <div class="asset-actions">
+                        <button class="btn btn-donate" onclick="donateAsset(${asset.asset_id})">
+                            ❤️ Пожертвовать
+                        </button>
+                        <button class="btn btn-buy" onclick="buyAsset(${asset.asset_id})">
+                            💰 Купить токены
+                        </button>
+                    </div>
+                `;
+                assetsGrid.appendChild(assetCard);
+            });
+        }
+
+        // Donate asset
+        function donateAsset(assetId) {
+            if (!window.simpleWalletManager.isConnected) {
+                alert('❌ Сначала подключите кошелек!');
+                return;
+            }
+
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (!asset) return;
+
+            const amount = prompt(`💝 Пожертвовать для проекта "${asset.name}"\n\nВведите сумму в SOL:`, '0.1');
+            
+            if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+                const confirmDonation = confirm(
+                    `Подтвердите пожертвование:\n\n` +
+                    `Проект: ${asset.name}\n` +
+                    `Сумма: ${amount} SOL\n\n` +
+                    `Продолжить?`
+                );
+
+                if (confirmDonation) {
+                    processDonation(assetId, parseFloat(amount));
+                }
+            }
+        }
+
+        // Buy asset
+        function buyAsset(assetId) {
+            if (!window.simpleWalletManager.isConnected) {
+                alert('❌ Сначала подключите кошелек!');
+                return;
+            }
+
+            const asset = assets.find(a => a.asset_id === assetId);
+            if (!asset) return;
+
+            const amount = prompt(`💰 Купить токены проекта "${asset.name}"\n\nВведите количество токенов:`, '10');
+            
+            if (amount && !isNaN(amount) && parseInt(amount) > 0) {
+                const totalPrice = parseFloat(amount) * asset.price_per_token;
+                const confirmBuy = confirm(
+                    `Подтвердите покупку:\n\n` +
+                    `Проект: ${asset.name}\n` +
+                    `Количество токенов: ${amount}\n` +
+                    `Цена за токен: $${asset.price_per_token}\n` +
+                    `Общая стоимость: $${totalPrice.toFixed(2)}\n\n` +
+                    `Продолжить?`
+                );
+
+                if (confirmBuy) {
+                    processBuy(assetId, parseInt(amount));
+                }
+            }
+        }
+
+        // Process donation
+        async function processDonation(assetId, amount) {
+            try {
+                alert('🔄 Обрабатываем пожертвование...');
+                
+                const response = await fetch(`${API_BASE}/api/transactions/donate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        donor_address: window.simpleWalletManager.walletAddress,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`✅ Пожертвование успешно!\n\nСпасибо за поддержку проекта!`);
+                    loadAssets(); // Reload assets
+                } else {
+                    alert(`❌ Ошибка пожертвования: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Donation error:', error);
+                alert(`❌ Ошибка: ${error.message}`);
+            }
+        }
+
+        // Process buy
+        async function processBuy(assetId, amount) {
+            try {
+                alert('🔄 Обрабатываем покупку...');
+                
+                const response = await fetch(`${API_BASE}/api/transactions/buy`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asset_id: assetId,
+                        buyer_address: window.simpleWalletManager.walletAddress,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`✅ Покупка успешна!\n\nВы приобрели ${amount} токенов!`);
+                    loadAssets(); // Reload assets
+                } else {
+                    alert(`❌ Ошибка покупки: ${data.error}`);
+                }
+            } catch (error) {
+                console.error('Buy error:', error);
+                alert(`❌ Ошибка: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

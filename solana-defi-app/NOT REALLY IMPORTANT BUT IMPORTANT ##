@@ -1,0 +1,69 @@
+Thought for 4sAnalyzed codebase structureBased on my analysis of the codebase, here's essential documentation for your development team:
+
+## **CRITICAL DEVELOPER NOTES**
+
+### **Project Architecture**
+
+- **Next.js 14 + App Router** - Uses the new app directory structure, not pages
+- **TypeScript + React 19** - Strict typing required, all components need Props interfaces
+- **Tailwind CSS v4** - Uses the new CSS-first approach, no tailwind.config.js file
+
+
+### **Styling System (IMPORTANT!)**
+
+```css
+/* Custom Solana theme in globals.css */
+--solana-purple: oklch(0.55 0.15 264);
+--solana-green: oklch(0.6 0.15 180);
+--solana-gradient: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+```
+
+- **Always use CSS variables** for colors, not hardcoded values
+- **OpenSea-inspired design** - Dark theme with card-based layouts
+- **Mobile-first responsive** - All components must work on mobile
+
+
+### **Component Conventions**
+
+```typescriptreact
+// REQUIRED: Props interface for every component
+interface ComponentNameProps {
+  // props here
+}
+
+export function ComponentName({ prop }: ComponentNameProps) {
+  // component logic
+}
+```
+
+### **File Organization Rules**
+
+- **Feature-based folders**: `/dashboard/`, `/trading/`, `/lending/`, `/opensea/`
+- **Never edit `/ui/` folder** - These are system components
+- **Page files**: Only in `/app/` directory (App Router)
+- **Custom components**: Always in feature-specific folders
+
+
+### **Key Dependencies & Gotchas**
+
+- **shadcn/ui**: Pre-built components, don't modify directly
+- **Lucide React**: For all icons (consistent icon system)
+- **CVA (Class Variance Authority)**: For component variants
+- **No global state management** - Uses local state only
+
+
+### **Development Workflow**
+
+1. **Always read files before editing** - Use SearchRepo/ReadFile
+2. **TypeScript strict mode** - All props must be typed
+3. **Responsive design required** - Test on mobile first
+4. **Use existing UI components** - Don't create new base components
+
+
+### **Common Pitfalls to Avoid**
+
+- Don't mix Tailwind utilities with custom CSS
+- Don't hardcode colors - use CSS variables
+- Don't edit system files in `/ui/`, `/hooks/`, `/lib/`
+- Don't break the mobile-first responsive design
+- Always use proper TypeScript interfaces

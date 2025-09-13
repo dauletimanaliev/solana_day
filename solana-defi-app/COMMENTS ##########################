@@ -1,0 +1,44 @@
+here's what you can safely edit vs. what you should avoid:
+
+## **SAFE TO EDIT** (Content & UI Files):
+
+**Page Content:**
+
+- `app/page.tsx` - Main homepage content and layout
+- `app/trade/page.tsx` - Trading page content
+- `app/lend/page.tsx` - Lending page content
+- `app/profile/page.tsx` - Profile page content
+
+
+**Components (Your Custom Content):**
+
+- `components/dashboard/opensea-dashboard.tsx` - Main dashboard layout
+- `components/opensea/opensea-header.tsx` - Header navigation
+- `components/trading/swap-interface.tsx` - Trading interface
+- `components/lending/lending-markets.tsx` - Lending platform
+- `components/profile/wallet-info.tsx` - Profile sections
+- Any other components in `/components/dashboard/`, `/components/opensea/`, `/components/trading/`, etc.
+
+
+**Styling:**
+
+- `app/globals.css` - Colors, themes, and custom styles (be careful with the base theme variables)
+
+
+## ️ **BE CAREFUL** (System Files):
+
+- `app/layout.tsx` - Only edit metadata/title, avoid changing the structure
+- `package.json` - Only add dependencies if needed, don't remove existing ones
+
+
+## **DO NOT EDIT** (Core System Files):
+
+- `components/ui/*` - Pre-built UI components (button, card, etc.)
+- `hooks/use-mobile.tsx` - System hooks
+- `hooks/use-toast.ts` - Toast functionality
+- `lib/utils.ts` - Utility functions
+- `next.config.mjs` - Next.js configuration
+- `tsconfig.json` - TypeScript configuration
+
+
+**Rule of thumb:** Edit files in your custom folders (`/dashboard/`, `/opensea/`, `/trading/`, `/lending/`, `/profile/`) and page files, but avoid touching the `/ui/`, `/hooks/`, and `/lib/` system folders.

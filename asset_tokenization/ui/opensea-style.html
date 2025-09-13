@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetToken - Marketplace для токенизированных активов</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #1a1a1a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav a {
+            color: #a1a1aa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: #ffffff;
+        }
+
+        .nav a.active {
+            color: #60a5fa;
+        }
+
+        .wallet-btn {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+
+        .wallet-btn.connected {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        /* Main Content */
+        .main {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23374151" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Categories */
+        .categories {
+            padding: 60px 0;
+            background: #0a0a0a;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(167, 139, 250, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: #60a5fa;
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #60a5fa;
+        }
+
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .category-desc {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+        }
+
+        /* Featured Assets */
+        .featured {
+            padding: 60px 0;
+            background: #111111;
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .asset-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-5px);
+            border-color: #60a5fa;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .asset-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #60a5fa;
+        }
+
+        .asset-info {
+            padding: 20px;
+        }
+
+        .asset-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .asset-creator {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .asset-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        .supply {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+        }
+
+        .asset-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+
+        .btn-secondary {
+            background: #2a2a2a;
+            color: #a1a1aa;
+            border: 1px solid #3a3a3a;
+        }
+
+        .btn-secondary:hover {
+            background: #3a3a3a;
+            color: #ffffff;
+        }
+
+        /* Create Asset Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a1a1aa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #a1a1aa;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            background: #0a0a0a;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+
+        .form-input::placeholder {
+            color: #6b7280;
+        }
+
+        /* Wallet Modal */
+        .wallet-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .wallet-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .wallet-option {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .wallet-option:hover {
+            border-color: #60a5fa;
+            background: #2a2a2a;
+        }
+
+        .wallet-icon {
+            font-size: 2rem;
+            color: #60a5fa;
+        }
+
+        .wallet-name {
+            font-weight: 600;
+        }
+
+        .wallet-desc {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .assets-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #a1a1aa;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #2a2a2a;
+            border-top: 2px solid #60a5fa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-coins"></i>
+                AssetToken
+            </div>
+            <nav class="nav">
+                <a href="#" class="active">Explore</a>
+                <a href="#">Create</a>
+                <a href="#">My Assets</a>
+                <a href="#">Activity</a>
+                <a href="#">Stats</a>
+            </nav>
+            <button class="wallet-btn" id="walletBtn">
+                <i class="fas fa-wallet"></i>
+                <span id="walletText">Connect Wallet</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Токенизируйте любые активы</h1>
+                <p>Создавайте, торгуйте и инвестируйте в токенизированные активы на блокчейне Solana</p>
+                <button class="wallet-btn" onclick="openCreateModal()" style="margin-top: 20px;">
+                    <i class="fas fa-plus"></i>
+                    Создать актив
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value" id="totalAssets">0</div>
+                    <div class="stat-label">Активов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalVolume">0 SOL</div>
+                    <div class="stat-label">Объем торгов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Пользователей</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="totalTrades">0</div>
+                    <div class="stat-label">Сделок</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="categories">
+            <div class="container">
+                <h2 class="section-title">Категории активов</h2>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="filterByCategory('real-estate')">
+                        <div class="category-icon">🏠</div>
+                        <div class="category-title">Недвижимость</div>
+                        <div class="category-desc">Фракционная собственность на недвижимость</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('art')">
+                        <div class="category-icon">🎨</div>
+                        <div class="category-title">Искусство</div>
+                        <div class="category-desc">Токенизация произведений искусства</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('music')">
+                        <div class="category-icon">🎵</div>
+                        <div class="category-title">Музыка</div>
+                        <div class="category-desc">Музыкальные права и роялти</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('gaming')">
+                        <div class="category-icon">🎮</div>
+                        <div class="category-title">Игры</div>
+                        <div class="category-desc">Игровые предметы и валюта</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('collectibles')">
+                        <div class="category-icon">💎</div>
+                        <div class="category-title">Коллекционирование</div>
+                        <div class="category-desc">Редкие предметы и коллекции</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('other')">
+                        <div class="category-icon">🔮</div>
+                        <div class="category-title">Другое</div>
+                        <div class="category-desc">Любые другие активы</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Assets -->
+        <section class="featured">
+            <div class="container">
+                <h2 class="section-title">Популярные активы</h2>
+                <div class="assets-grid" id="assetsGrid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Загрузка активов...
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Create Asset Modal -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Создать новый актив</h3>
+                <button class="close-btn" onclick="closeCreateModal()">&times;</button>
+            </div>
+            <form id="createAssetForm">
+                <div class="form-group">
+                    <label class="form-label">Название актива</label>
+                    <input type="text" class="form-input" id="assetName" placeholder="Моя недвижимость" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <input type="text" class="form-input" id="assetDescription" placeholder="Квартира в центре города" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Категория</label>
+                    <select class="form-input" id="assetCategory" required>
+                        <option value="">Выберите категорию</option>
+                        <option value="real-estate">Недвижимость</option>
+                        <option value="art">Искусство</option>
+                        <option value="music">Музыка</option>
+                        <option value="gaming">Игры</option>
+                        <option value="collectibles">Коллекционирование</option>
+                        <option value="other">Другое</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Общее количество токенов</label>
+                    <input type="number" class="form-input" id="totalSupply" placeholder="1000000" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Цена за токен (SOL)</label>
+                    <input type="number" class="form-input" id="pricePerToken" placeholder="0.001" step="0.001" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">URI метаданных</label>
+                    <input type="url" class="form-input" id="metadataUri" placeholder="https://example.com/metadata.json" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-rocket"></i>
+                    Создать актив за 0.1 SOL
+                </button>
+            </form>
+            <div id="createResult" class="message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="wallet-modal" id="walletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Подключить кошелек</h3>
+                <button class="close-btn" onclick="closeWalletModal()">&times;</button>
+            </div>
+            <div class="wallet-options">
+                <div class="wallet-option" onclick="connectWallet('phantom')">
+                    <div class="wallet-icon">👻</div>
+                    <div>
+                        <div class="wallet-name">Phantom</div>
+                        <div class="wallet-desc">Популярный Solana кошелек</div>
+                    </div>
+                </div>
+                <div class="wallet-option" onclick="connectWallet('solflare')">
+                    <div class="wallet-icon">🔥</div>
+                    <div>
+                        <div class="wallet-name">Solflare</div>
+                        <div class="wallet-desc">Безопасный Solana кошелек</div>
+                    </div>
+                </div>
+                <div class="wallet-option" onclick="connectWallet('backpack')">
+                    <div class="wallet-icon">🎒</div>
+                    <div>
+                        <div class="wallet-name">Backpack</div>
+                        <div class="wallet-desc">Современный кошелек</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let isWalletConnected = false;
+        let currentWallet = null;
+        let assets = [];
+
+        // API base URL
+        const API_BASE = 'http://localhost:3001';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAssets();
+            updateStats();
+        });
+
+        // Wallet functions
+        function openWalletModal() {
+            document.getElementById('walletModal').classList.add('active');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.remove('active');
+        }
+
+        function connectWallet(walletType) {
+            // Simulate wallet connection
+            isWalletConnected = true;
+            currentWallet = walletType;
+            
+            document.getElementById('walletText').textContent = 'Connected';
+            document.getElementById('walletBtn').classList.add('connected');
+            document.getElementById('walletBtn').innerHTML = '<i class="fas fa-check"></i> Connected';
+            
+            closeWalletModal();
+            
+            // Show success message
+            showMessage('Кошелек успешно подключен!', 'success');
+        }
+
+        // Create asset functions
+        function openCreateModal() {
+            if (!isWalletConnected) {
+                openWalletModal();
+                return;
+            }
+            document.getElementById('createModal').classList.add('active');
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.getElementById('createAssetForm').reset();
+            document.getElementById('createResult').style.display = 'none';
+        }
+
+        // Load assets from API
+        async function loadAssets() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    assets = data.data;
+                    renderAssets(assets);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error loading assets:', error);
+                // Show mock data if API fails
+                assets = [
+                    {
+                        id: '12345',
+                        name: 'Элитная квартира в Москве',
+                        creator: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j',
+                        totalSupply: '1000000',
+                        remainingSupply: '800000',
+                        price: '0.001',
+                        category: 'real-estate',
+                        metadataUri: 'https://example.com/metadata/12345.json'
+                    },
+                    {
+                        id: '67890',
+                        name: 'Цифровая картина "Космос"',
+                        creator: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j',
+                        totalSupply: '500000',
+                        remainingSupply: '300000',
+                        price: '0.002',
+                        category: 'art',
+                        metadataUri: 'https://example.com/metadata/67890.json'
+                    }
+                ];
+                renderAssets(assets);
+            }
+        }
+
+        // Render assets
+        function renderAssets(assetsToRender) {
+            const grid = document.getElementById('assetsGrid');
+            
+            if (assetsToRender.length === 0) {
+                grid.innerHTML = '<div class="loading">Нет активов для отображения</div>';
+                return;
+            }
+
+            grid.innerHTML = assetsToRender.map(asset => `
+                <div class="asset-card" onclick="viewAsset('${asset.id}')">
+                    <div class="asset-image">
+                        ${getCategoryIcon(asset.category)}
+                    </div>
+                    <div class="asset-info">
+                        <div class="asset-title">${asset.name || `Актив #${asset.id}`}</div>
+                        <div class="asset-creator">${asset.creator.substring(0, 8)}...${asset.creator.substring(-4)}</div>
+                        <div class="asset-price">
+                            <span class="price">${asset.price} SOL</span>
+                            <span class="supply">${parseInt(asset.remainingSupply).toLocaleString()} / ${parseInt(asset.totalSupply).toLocaleString()}</span>
+                        </div>
+                        <div class="asset-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); buyAsset('${asset.id}')">
+                                <i class="fas fa-shopping-cart"></i> Купить
+                            </button>
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); viewAsset('${asset.id}')">
+                                <i class="fas fa-eye"></i> Подробнее
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get category icon
+        function getCategoryIcon(category) {
+            const icons = {
+                'real-estate': '🏠',
+                'art': '🎨',
+                'music': '🎵',
+                'gaming': '🎮',
+                'collectibles': '💎',
+                'other': '🔮'
+            };
+            return icons[category] || '🔮';
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            const filteredAssets = assets.filter(asset => asset.category === category);
+            renderAssets(filteredAssets);
+        }
+
+        // Buy asset
+        function buyAsset(assetId) {
+            if (!isWalletConnected) {
+                openWalletModal();
+                return;
+            }
+            
+            const asset = assets.find(a => a.id === assetId);
+            if (asset) {
+                const amount = prompt(`Количество токенов для покупки (максимум: ${parseInt(asset.remainingSupply).toLocaleString()}):`);
+                if (amount && parseInt(amount) > 0) {
+                    buyAssetTokens(assetId, parseInt(amount));
+                }
+            }
+        }
+
+        // Buy asset tokens
+        async function buyAssetTokens(assetId, amount) {
+            try {
+                const response = await fetch(`${API_BASE}/api/transactions/buy_fraction`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        assetId: parseInt(assetId),
+                        amount: amount,
+                        buyer: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(`Успешно куплено ${amount} токенов!`, 'success');
+                    loadAssets(); // Reload assets
+                } else {
+                    showMessage(`Ошибка: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`Ошибка: ${error.message}`, 'error');
+            }
+        }
+
+        // View asset details
+        function viewAsset(assetId) {
+            const asset = assets.find(a => a.id === assetId);
+            if (asset) {
+                alert(`Детали актива:\n\nНазвание: ${asset.name || `Актив #${asset.id}`}\nСоздатель: ${asset.creator}\nОбщее количество: ${parseInt(asset.totalSupply).toLocaleString()}\nОстаток: ${parseInt(asset.remainingSupply).toLocaleString()}\nЦена: ${asset.price} SOL`);
+            }
+        }
+
+        // Create asset form
+        document.getElementById('createAssetForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                assetId: Date.now(), // Generate unique ID
+                name: document.getElementById('assetName').value,
+                description: document.getElementById('assetDescription').value,
+                category: document.getElementById('assetCategory').value,
+                totalSupply: parseInt(document.getElementById('totalSupply').value),
+                pricePerToken: parseFloat(document.getElementById('pricePerToken').value),
+                metadataUri: document.getElementById('metadataUri').value,
+                creator: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j'
+            };
+
+            const resultDiv = document.getElementById('createResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'message';
+            resultDiv.innerHTML = '<div class="spinner"></div> Создание актива...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/assets/create_asset`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'message success';
+                    resultDiv.innerHTML = `✅ Актив создан успешно!<br><br>
+                    ID: ${data.data.assetId}<br>
+                    Транзакция: ${data.data.transaction}<br>
+                    <a href="${data.data.explorer}" target="_blank" style="color: #60a5fa;">Посмотреть в Explorer</a>`;
+                    
+                    // Add to local assets
+                    assets.unshift({
+                        id: data.data.assetId.toString(),
+                        name: formData.name,
+                        creator: formData.creator,
+                        totalSupply: formData.totalSupply.toString(),
+                        remainingSupply: formData.totalSupply.toString(),
+                        price: formData.pricePerToken.toString(),
+                        category: formData.category,
+                        metadataUri: formData.metadataUri
+                    });
+                    
+                    renderAssets(assets);
+                    updateStats();
+                    
+                    // Reset form
+                    document.getElementById('createAssetForm').reset();
+                } else {
+                    resultDiv.className = 'message error';
+                    resultDiv.innerHTML = `❌ Ошибка: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'message error';
+                resultDiv.innerHTML = `❌ Ошибка: ${error.message}`;
+            }
+        });
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalAssets').textContent = assets.length;
+            document.getElementById('totalVolume').textContent = '1.5 SOL';
+            document.getElementById('totalUsers').textContent = '42';
+            document.getElementById('totalTrades').textContent = '128';
+        }
+
+        // Show message
+        function showMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            message.style.position = 'fixed';
+            message.style.top = '90px';
+            message.style.right = '20px';
+            message.style.zIndex = '3000';
+            message.style.maxWidth = '300px';
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.remove();
+            }, 5000);
+        }
+
+        // Event listeners
+        document.getElementById('walletBtn').addEventListener('click', function() {
+            if (isWalletConnected) {
+                // Disconnect wallet
+                isWalletConnected = false;
+                currentWallet = null;
+                this.innerHTML = '<i class="fas fa-wallet"></i> Connect Wallet';
+                this.classList.remove('connected');
+                showMessage('Кошелек отключен', 'success');
+            } else {
+                openWalletModal();
+            }
+        });
+
+        // Close modals on outside click
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

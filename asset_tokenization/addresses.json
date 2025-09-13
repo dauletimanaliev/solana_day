@@ -1,0 +1,45 @@
+{
+  "programId": "FuAVoPCtaJWnJZVxE2ii4CtiqPwgvmxLE7gkGv5udmjQ",
+  "network": "devnet",
+  "rpcUrl": "https://api.devnet.solana.com",
+  "seeds": {
+    "asset": "asset",
+    "escrow": "escrow", 
+    "revenuePool": "revenue_pool"
+  },
+  "exampleAddresses": {
+    "assetId12345": {
+      "assetPda": "Ckf9kk5kRDFNps1xVZCe2shHm1eHH9JvdxdL8CkEDov9",
+      "escrowPda": "Af49VWs6YwcAaa96J9SDAiP4vSxVbFgedh559ZFStQJx",
+      "revenuePoolPda": "6FR7Jw82PZGZMRxp4Fq1LxPT7hhAeFkrcP9n8iPvEoMr"
+    }
+  },
+  "pdaDerivation": {
+    "asset": "findProgramAddressSync([Buffer.from('asset'), assetId.toArrayLike(Buffer, 'le', 8)], programId)",
+    "escrow": "findProgramAddressSync([Buffer.from('escrow'), assetPda.toBytes()], programId)",
+    "revenuePool": "findProgramAddressSync([Buffer.from('revenue_pool'), assetPda.toBytes()], programId)"
+  },
+  "instructions": {
+    "createAsset": "create_asset",
+    "mintFractionTokens": "mint_fraction_tokens", 
+    "buyFractions": "buy_fractions",
+    "distributeRevenue": "distribute_revenue"
+  },
+  "accounts": {
+    "Asset": {
+      "fields": ["id", "creator", "metadataUri", "totalSupply", "remainingSupply", "bump"]
+    },
+    "Escrow": {
+      "fields": ["asset", "amount", "bump"]
+    },
+    "RevenuePool": {
+      "fields": ["asset", "totalRevenue", "distributedRevenue", "bump"]
+    }
+  },
+  "errors": {
+    "InsufficientSupply": "Insufficient supply",
+    "InsufficientTokenBalance": "Insufficient token balance", 
+    "InvalidAmount": "Invalid amount",
+    "Unauthorized": "Unauthorized"
+  }
+}

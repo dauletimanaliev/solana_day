@@ -1,0 +1,20 @@
+[toolchain]
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+asset_tokenization = "EABC6FncDMNntAh2BjCvFJLesTdfdcoyqTUhjLpeQoBE"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+build = "cargo build-sbf --manifest-path=programs/asset_tokenization/Cargo.toml"
+test = "cargo test-sbf --manifest-path=programs/asset_tokenization/Cargo.toml"

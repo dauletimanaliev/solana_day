@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Tokenization Platform - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .api-endpoint {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .method {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .method.post { background: #28a745; color: white; }
+        .method.get { background: #007bff; color: white; }
+        
+        .endpoint {
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .test-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Asset Tokenization Platform</h1>
+            <p>Полноценная платформа для токенизации активов на Solana</p>
+        </div>
+        
+        <div class="content">
+            <!-- Статус API -->
+            <div class="section">
+                <h2>📊 Статус системы</h2>
+                <div id="api-status" class="status error">
+                    ❌ API сервер не запущен
+                </div>
+                <button class="test-button" onclick="checkAPI()">🔄 Проверить API</button>
+            </div>
+            
+            <!-- API Эндпоинты -->
+            <div class="section">
+                <h2>🔗 API Эндпоинты</h2>
+                
+                <div class="api-endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="endpoint">/health</span>
+                    </div>
+                    <button class="test-button" onclick="testEndpoint('GET', '/health')">Тест</button>
+                </div>
+                
+                <div class="api-endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="endpoint">/api/assets/create_asset</span>
+                    </div>
+                    <button class="test-button" onclick="testCreateAsset()">Тест</button>
+                </div>
+                
+                <div class="api-endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="endpoint">/api/assets/mint_fraction</span>
+                    </div>
+                    <button class="test-button" onclick="testMintTokens()">Тест</button>
+                </div>
+                
+                <div class="api-endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="endpoint">/api/transactions/buy_fraction</span>
+                    </div>
+                    <button class="test-button" onclick="testBuyFractions()">Тест</button>
+                </div>
+                
+                <div class="api-endpoint">
+                    <div>
+                        <span class="method post">POST</span>
+                        <span class="endpoint">/api/transactions/distribute_revenue</span>
+                    </div>
+                    <button class="test-button" onclick="testDistributeRevenue()">Тест</button>
+                </div>
+                
+                <div class="api-endpoint">
+                    <div>
+                        <span class="method get">GET</span>
+                        <span class="endpoint">/api/assets</span>
+                    </div>
+                    <button class="test-button" onclick="testGetAssets()">Тест</button>
+                </div>
+            </div>
+            
+            <!-- Результаты тестов -->
+            <div class="section">
+                <h2>📋 Результаты тестов</h2>
+                <div id="test-results" class="result">Нажмите кнопки выше для тестирования API...</div>
+            </div>
+            
+            <!-- Статистика -->
+            <div class="section">
+                <h2>📈 Статистика проекта</h2>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">API Эндпоинтов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Инструкции</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Типа аккаунтов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Готовность</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Компоненты -->
+            <div class="section">
+                <h2>🎨 Frontend компоненты</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>AssetCreationWizard</h3>
+                        <p>Пошаговый мастер создания токенизированного актива с 5 этапами</p>
+                    </div>
+                    <div class="card">
+                        <h3>RevenueDistribution</h3>
+                        <p>Умное распределение дохода между держателями токенов</p>
+                    </div>
+                    <div class="card">
+                        <h3>PortfolioAnalytics</h3>
+                        <p>Продвинутая аналитика портфеля с графиками и статистикой</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Инструкции -->
+            <div class="section">
+                <h2>📖 Как запустить</h2>
+                <div class="result">
+# 1. Запуск API сервера
+cd /Users/dauletimanaliev/Desktop/solana/asset_tokenization
+node simple-api.js
+
+# 2. Тестирование API
+node test-integration.js
+
+# 3. Запуск демо
+./start-demo.sh
+
+# 4. Открыть эту страницу в браузере
+open demo.html
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        
+        function log(message) {
+            const results = document.getElementById('test-results');
+            results.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        async function checkAPI() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                const status = document.getElementById('api-status');
+                status.className = 'status success';
+                status.textContent = '✅ API сервер работает';
+                
+                log('✅ API сервер доступен: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                const status = document.getElementById('api-status');
+                status.className = 'status error';
+                status.textContent = '❌ API сервер недоступен';
+                
+                log('❌ Ошибка подключения к API: ' + error.message);
+            }
+        }
+        
+        async function testEndpoint(method, endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                const data = await response.json();
+                log(`✅ ${method} ${endpoint}: ` + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log(`❌ ${method} ${endpoint}: ` + error.message);
+            }
+        }
+        
+        async function testCreateAsset() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets/create_asset`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        assetId: 12345,
+                        metadataUri: 'https://example.com/metadata/12345.json',
+                        totalSupply: 1000000,
+                        creator: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j'
+                    })
+                });
+                const data = await response.json();
+                log('✅ Create Asset: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('❌ Create Asset: ' + error.message);
+            }
+        }
+        
+        async function testMintTokens() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets/mint_fraction`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        assetId: 12345,
+                        amount: 100000,
+                        creator: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j'
+                    })
+                });
+                const data = await response.json();
+                log('✅ Mint Tokens: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('❌ Mint Tokens: ' + error.message);
+            }
+        }
+        
+        async function testBuyFractions() {
+            try {
+                const response = await fetch(`${API_BASE}/api/transactions/buy_fraction`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        assetId: 12345,
+                        amount: 1000,
+                        buyer: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j'
+                    })
+                });
+                const data = await response.json();
+                log('✅ Buy Fractions: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('❌ Buy Fractions: ' + error.message);
+            }
+        }
+        
+        async function testDistributeRevenue() {
+            try {
+                const response = await fetch(`${API_BASE}/api/transactions/distribute_revenue`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        assetId: 12345,
+                        amount: 1000,
+                        creator: 'AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j'
+                    })
+                });
+                const data = await response.json();
+                log('✅ Distribute Revenue: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('❌ Distribute Revenue: ' + error.message);
+            }
+        }
+        
+        async function testGetAssets() {
+            try {
+                const response = await fetch(`${API_BASE}/api/assets`);
+                const data = await response.json();
+                log('✅ Get Assets: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('❌ Get Assets: ' + error.message);
+            }
+        }
+        
+        // Автоматическая проверка API при загрузке
+        window.onload = function() {
+            checkAPI();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "programId": "FuAVoPCtaJWnJZVxE2ii4CtiqPwgvmxLE7gkGv5udmjQ",
+  "network": "devnet",
+  "rpcUrl": "https://api.devnet.solana.com",
+  "wallet": "AP5FsMraMmpeytpBocRa4YyEgXANe8zFykPnwVq4aE8j",
+  "pdas": {
+    "asset": "Ckf9kk5kRDFNps1xVZCe2shHm1eHH9JvdxdL8CkEDov9",
+    "escrow": "Af49VWs6YwcAaa96J9SDAiP4vSxVbFgedh559ZFStQJx",
+    "revenuePool": "6FR7Jw82PZGZMRxp4Fq1LxPT7hhAeFkrcP9n8iPvEoMr"
+  },
+  "status": "needs_deployment",
+  "instructions": [
+    "createAsset",
+    "mintFractionTokens",
+    "buyFractions",
+    "distributeRevenue"
+  ],
+  "accounts": [
+    "Asset",
+    "Escrow",
+    "RevenuePool"
+  ],
+  "errors": [
+    "InsufficientSupply",
+    "InsufficientTokenBalance",
+    "InvalidAmount",
+    "Unauthorized"
+  ],
+  "readyForIntegration": true
+}
